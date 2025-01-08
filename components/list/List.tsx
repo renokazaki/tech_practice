@@ -44,7 +44,7 @@ export const List: React.FC<ListProps> = ({ tasks, setTasks }) => {
         if (alltask.data) {
           // データをStateに設定
           setTasks(alltask.data as Task[]);
-          console.log("取得したタスク:", alltask.data); // デバッグ用
+          // console.log("取得したタスク:", alltask.data); // デバッグ用
         } else {
           console.error("タスクの取得に失敗しました:", alltask.error); // エラーをログ出力
         }

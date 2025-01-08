@@ -9,19 +9,19 @@ const EmergencyIcon = (props: props) => {
 
   if (emergency === "low") {
     return (
-      <div className="flex items-center gap-2 text-blue-500">
+      <div className="flex items-center gap-2 text-emerald-500">
         <span>low</span>
       </div>
     );
   } else if (emergency === "middle") {
     return (
-      <div className="flex items-center gap-2  text-yellow-500">
+      <div className="flex items-center gap-2  text-yellow-300">
         <span>middle</span>
       </div>
     );
   } else if (emergency === "high") {
     return (
-      <div className="flex items-center gap-2  text-red-500">
+      <div className="flex items-center gap-2  text-red-700">
         <span>high</span>
       </div>
     );
