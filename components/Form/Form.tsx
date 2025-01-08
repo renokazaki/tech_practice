@@ -41,9 +41,10 @@ type Task = {
 
 type FormProps = {
   setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
+  selectcategory: string;
 };
 
-const Form: React.FC<FormProps> = ({ setTasks }) => {
+const Form: React.FC<FormProps> = ({ setTasks, selectcategory }) => {
   const form = useForm({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -64,7 +65,8 @@ const Form: React.FC<FormProps> = ({ setTasks }) => {
       formValues.title,
       formValues.description,
       formValues.emergency,
-      formValues.status
+      formValues.status,
+      selectcategory
     );
 
     // フォームの値をリセット

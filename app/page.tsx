@@ -29,10 +29,16 @@ export default function Home() {
 
   const [tasks, setTasks] = useState<Task[]>([]);
 
+  const [selectcategory, setSelectCategory] = useState<string>("all");
+
   return (
     <>
       <div className="h-screen w-screen flex flex-col item-center">
-        <Navbar />
+        <Navbar
+          selectcategory={selectcategory}
+          setSelectCategory={setSelectCategory}
+          setTasks={setTasks}
+        />
         <ResizablePanelGroup
           className="h-full w-full flex flex-col sm:flex-row border"
           direction="horizontal"
@@ -45,7 +51,7 @@ export default function Home() {
                     <CardTitle>Create New Task</CardTitle>
                     <CardDescription>what do you to do today</CardDescription>
                   </div>
-                  <Form setTasks={setTasks} />
+                  <Form setTasks={setTasks} selectcategory={selectcategory} />
                 </div>
               </ResizablePanel>
               <ResizableHandle withHandle />

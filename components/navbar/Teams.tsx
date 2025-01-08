@@ -1,80 +1,111 @@
-import React from "react";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { Button } from "../ui/button";
-import { Avatar, AvatarImage } from "../ui/avatar";
+import React, { useEffect, useState } from "react";
+
 import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-  CommandSeparator,
-} from "../ui/command";
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { PlusIcon } from "lucide-react";
+import { getCategory, gettask } from "@/lib/supabasefunction";
+import { Button } from "../ui/button";
+type Category = {
+  id: number;
+  category: string;
+};
 
-const groups = [
-  { label: "Personal Account", teams: [{ label: "Evandro V." }] },
-  {
-    label: "Team Account",
-    teams: [
-      { label: "Evandro V1." },
-      { label: "Evandro V2." },
-      { label: "Evandro V3." },
-    ],
-  },
-];
+// Emergency と Status を型として定義
+type Emergency = "low" | "middle" | "high";
+type Status = "pending" | "in progress" | "done";
+// Task の型定義
+type Task = {
+  id: number;
+  title: string;
+  description: string;
+  emergency: Emergency;
+  status: Status;
+};
 
-const Teams = () => {
+type SelectCategoryProps = {
+  selectCategory: string;
+  setSelectCategory: React.Dispatch<React.SetStateAction<string>>;
+  setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
+};
+const Teams: React.FC<SelectCategoryProps> = ({
+  selectCategory,
+  setSelectCategory,
+  setTasks,
+}) => {
+  const [category, setCategory] = useState<Category[]>([]);
+
+  useEffect(() => {
+    // カテゴリを取得する関数
+    const fetchAllCategory = async () => {
+      try {
+        const allCategory = await getCategory();
+        if (allCategory.data) {
+          // データをStateに設定
+          setCategory(allCategory.data as Category[]);
+          // console.log("取得したカテゴリ:", allCategory.data); // デバッグ用
+        } else {
+          console.error("カテゴリの取得に失敗しました:", allCategory.error); // エラーをログ出力
+        }
+      } catch (error) {
+        console.error("データ取得中にエラーが発生しました:", error);
+      }
+    };
+    // fetchAllCategoryを呼び出す
+    fetchAllCategory();
+  }, [selectCategory]);
+
+  useEffect(() => {
+    // タスクを取得する関数
+    const fetchAllTask = async () => {
+      try {
+        const alltask = await gettask();
+        if (alltask.data) {
+          // データをStateに設定
+          setTasks(alltask.data as Task[]);
+          // console.log("取得したタスク:", alltask.data); // デバッグ用
+        } else {
+          console.error("タスクの取得に失敗しました:", alltask.error); // エラーをログ出力
+        }
+      } catch (error) {
+        console.error("データ取得中にエラーが発生しました:", error);
+      }
+    };
+    // fetchAllTaskを呼び出す
+    fetchAllTask();
+  }, [selectCategory]);
+
   return (
-    <Popover>
-      {/* asChild プロパティを使用してネスト問題を解消 */}
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          role="combobox"
-          aria-label="Select a team"
-          className="w-auto sm:w-[200px]  justify-around"
-        >
-          <Avatar className="mr-2 h-8 w-8">
-            <AvatarImage
-              src="http://avatar.vercel.sh/Evandro.png"
-              alt="Avatar"
-              className="grayscale"
-            />
-          </Avatar>
+    <Select onValueChange={(value) => setSelectCategory(value)}>
+      <SelectTrigger className="w-[180px]">
+        <SelectValue placeholder={selectCategory} />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          {category.map((item) => (
+            <SelectItem
+              key={item.id}
+              value={item.id.toString()}
+              className="cursor-pointer border-b-2"
+            >
+              <div onClick={() => console.log(item.category)}>
+                {item.category}
+              </div>
+            </SelectItem>
+          ))}
+        </SelectGroup>
+
+        <Button className="w-[180px] mt-2">
+          <PlusIcon className=" flex justify-center " />
+          create category
         </Button>
-      </PopoverTrigger>
-      <PopoverContent>
-        <Command>
-          <CommandInput placeholder="Search Team..." />
-          <CommandList>
-            <CommandEmpty>No Team Found</CommandEmpty>
-            {groups.map((group) => (
-              <CommandGroup key={group.label} heading={group.label}>
-                {group.teams.map((team) => (
-                  <CommandItem key={team.label} className="text-sm">
-                    <Avatar className="mr-2 h-5 w-5">
-                      <AvatarImage
-                        src={`http://avatar.vercel.sh/${team.label}.png`}
-                      />
-                    </Avatar>
-                    {team.label}
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-            ))}
-          </CommandList>
-          <CommandSeparator />
-          <CommandGroup>
-            <CommandItem className="mt-4">
-              <PlusIcon className=" w-4 h-4 mr-2" />
-              create a new team
-            </CommandItem>
-          </CommandGroup>
-        </Command>
-      </PopoverContent>
-    </Popover>
+      </SelectContent>
+    </Select>
   );
 };
 

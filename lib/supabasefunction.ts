@@ -7,10 +7,27 @@ export const gettask = async () =>{
     return task
 }
 //task追加用
-export const addtask = async (title:string,description:string,emergency:string,status:string) =>{
-    await supabase.from("Task").insert({title:title,description:description,emergency:emergency,status:status})
+export const addtask = async (title:string,description:string,emergency:string,status:string,category_id:string) =>{
+      // category_id を数値に変換
+  const numericCategoryId = parseInt(category_id, 10);
+
+    await supabase.from("Task").insert({title:title,description:description,emergency:emergency,status:status ,category_id:numericCategoryId})
 }
 //=====================================================================================================================
+
+
+//=====================================================================================================================
+//Category取得用
+export const getCategory = async () =>{
+    const category = await supabase.from("Category").select("*").order("id", { ascending: true }); // idで昇順に並べる
+    return category
+}
+//Category追加用
+export const addCategory = async (category:string) =>{
+    await supabase.from("Category").insert({category:category})
+}
+//=====================================================================================================================
+
 
 
 //=====================================================================================================================

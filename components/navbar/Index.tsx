@@ -1,18 +1,37 @@
 import React from "react";
 import Teams from "./Teams";
 import Links from "./Links";
-import Search from "./Search";
 
-const Navbar = () => {
+// Emergency と Status を型として定義
+type Emergency = "low" | "middle" | "high";
+type Status = "pending" | "in progress" | "done";
+// Task の型定義
+type Task = {
+  id: number;
+  title: string;
+  description: string;
+  emergency: Emergency;
+  status: Status;
+};
+
+type CategoryProps = {
+  selectcategory: string;
+  setSelectCategory: React.Dispatch<React.SetStateAction<string>>;
+  setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
+};
+const Navbar: React.FC<CategoryProps> = ({
+  selectcategory,
+  setSelectCategory,
+  setTasks,
+}) => {
   return (
     <nav className="flex justify-between items-center px-2 py-2 ">
-      <div className="flex items-center gap-8 ">
-        <Teams />
-        <Links />
-      </div>
-      <div className="flex items-center gap-10">
-        <Search />
-      </div>
+      <Teams
+        selectCategory={selectcategory}
+        setSelectCategory={setSelectCategory}
+        setTasks={setTasks}
+      />
+      <Links />
     </nav>
   );
 };
