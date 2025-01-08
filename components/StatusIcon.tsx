@@ -11,22 +11,22 @@ const StatusIcon = (props: props) => {
   if (status === "pending") {
     return (
       <div className="flex items-center gap-2">
-        <div className="w-2 h-2 rounded-full bg-yellow-400" />
         <span>pending</span>
+        <div className="w-2 h-2 rounded-full bg-yellow-400" />
       </div>
     );
   } else if (status === "in progress") {
     return (
       <div className="flex items-center gap-2">
-        <div className="w-2 h-2 rounded-full bg-blue-300" />
         <span>in progress</span>
+        <div className="w-2 h-2 rounded-full bg-blue-500" />
       </div>
     );
   } else if (status === "done") {
     return (
       <div className="flex items-center gap-2">
-        <div className="w-2 h-2 rounded-full bg-green-500" />
         <span>done</span>
+        <div className="w-2 h-2 rounded-full bg-green-500" />
       </div>
     );
   }

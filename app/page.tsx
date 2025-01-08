@@ -1,5 +1,6 @@
 "use client";
 
+import Chart from "@/components/Chart/Chart";
 import Form from "@/components/Form/Form";
 import { List } from "@/components/list/List";
 import Navbar from "@/components/navbar/Index";
@@ -49,7 +50,9 @@ export default function Home() {
                 </div>
               </ResizablePanel>
               <ResizableHandle withHandle />
-              <ResizablePanel>Charts</ResizablePanel>
+              <ResizablePanel>
+                <Chart tasks={tasks} />
+              </ResizablePanel>
             </ResizablePanelGroup>
           </ResizablePanel>
           <ResizableHandle withHandle />
