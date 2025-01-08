@@ -100,8 +100,8 @@ const Form: React.FC<FormProps> = ({ setTasks }) => {
 
   return (
     <FormComp {...form}>
-      <form className="space-y-2" onSubmit={handleSubmit}>
-        <div className="flex items-center gap-3">
+      <form className="space-y-4" onSubmit={handleSubmit}>
+        <div className="block  sm:flex items-center gap-3">
           <FormField
             control={form.control}
             name="title"
@@ -174,9 +174,6 @@ const Form: React.FC<FormProps> = ({ setTasks }) => {
               </FormItem>
             )}
           />
-          <Button type="submit" onClick={handleSubmit}>
-            Add
-          </Button>
         </div>
         {/* descriptiom */}
         <FormField
@@ -195,6 +192,9 @@ const Form: React.FC<FormProps> = ({ setTasks }) => {
             </FormItem>
           )}
         />
+        <Button type="submit" onClick={handleSubmit} className="w-full ">
+          Add
+        </Button>
       </form>
     </FormComp>
   );

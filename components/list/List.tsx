@@ -57,15 +57,15 @@ export const List: React.FC<ListProps> = ({ tasks, setTasks }) => {
   }, []);
 
   return (
-    <div className="overflow-auto h-full">
+    <div className="overflow-auto h-full w-full">
       {/* 親コンテナにスクロール設定 */}
       <Table>
         <TableHeader>
           <TableRow>
             <TableHead>Title</TableHead>
             <TableHead>Emergency</TableHead>
-            <TableHead>status</TableHead>
-            <TableHead>description</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Description</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -78,7 +78,6 @@ export const List: React.FC<ListProps> = ({ tasks, setTasks }) => {
               <TableCell>
                 <StatusIcon status={item.status} />
               </TableCell>
-
               <TableCell colSpan={3}>{item.description}</TableCell>
             </TableRow>
           ))}

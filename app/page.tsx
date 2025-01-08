@@ -31,26 +31,25 @@ export default function Home() {
 
   return (
     <>
-      <div className="h-screen flex flex-col item-center">
+      <div className="h-screen w-screen flex flex-col item-center">
         <Navbar />
         <ResizablePanelGroup
-          className="h-full w-full border"
+          className="h-full w-full flex flex-col sm:flex-row border"
           direction="horizontal"
         >
           <ResizablePanel>
             <ResizablePanelGroup direction="vertical">
               <ResizablePanel>
                 <div className="h-full flex flex-col justify-center p-6 space-y-4">
-                  <div className="space-y-2">
+                  <div className="space-y-2 hidden sm:block">
                     <CardTitle>Create New Task</CardTitle>
                     <CardDescription>what do you to do today</CardDescription>
                   </div>
-
                   <Form setTasks={setTasks} />
                 </div>
               </ResizablePanel>
               <ResizableHandle withHandle />
-              <ResizablePanel>
+              <ResizablePanel className="hidden sm:block">
                 <Chart tasks={tasks} />
               </ResizablePanel>
             </ResizablePanelGroup>
