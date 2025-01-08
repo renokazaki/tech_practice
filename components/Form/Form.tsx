@@ -59,7 +59,7 @@ const Form: React.FC<FormProps> = ({ setTasks }) => {
 
     // フォームの値を取得
     const formValues = form.getValues();
-
+    console.log(formValues);
     // タスクを追加する関数
     await addtask(
       formValues.title,
