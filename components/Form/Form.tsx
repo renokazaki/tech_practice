@@ -49,8 +49,8 @@ const Form: React.FC<FormProps> = ({ setTasks }) => {
     defaultValues: {
       title: "",
       description: "",
-      emergency: "low",
-      status: "pending",
+      emergency: "",
+      status: "",
     },
   });
 
@@ -118,10 +118,10 @@ const Form: React.FC<FormProps> = ({ setTasks }) => {
           <FormField
             control={form.control}
             name="emergency"
-            render={({}) => (
+            render={({ field }) => (
               <FormItem>
                 <FormMessage />
-                <Select>
+                <Select value={field.value} onValueChange={field.onChange}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="emaegency" />
@@ -148,10 +148,10 @@ const Form: React.FC<FormProps> = ({ setTasks }) => {
           <FormField
             control={form.control}
             name="status"
-            render={({}) => (
+            render={({ field }) => (
               <FormItem className="grow">
                 <FormMessage />
-                <Select>
+                <Select value={field.value} onValueChange={field.onChange}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="status" />
@@ -175,7 +175,7 @@ const Form: React.FC<FormProps> = ({ setTasks }) => {
             )}
           />
           <Button type="submit" onClick={handleSubmit}>
-            Add task
+            Add
           </Button>
         </div>
         {/* descriptiom */}
@@ -188,7 +188,7 @@ const Form: React.FC<FormProps> = ({ setTasks }) => {
               <FormControl>
                 <Textarea
                   className="text-xs resize-none"
-                  placeholder="please input about details"
+                  placeholder="input description"
                   {...field}
                 />
               </FormControl>
