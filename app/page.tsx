@@ -1,12 +1,33 @@
+"use client";
+
 import Form from "@/components/Form/Form";
+import { List } from "@/components/list/List";
 import Navbar from "@/components/navbar/Index";
+
 import { CardDescription, CardTitle } from "@/components/ui/card";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
+import { useState } from "react";
+
 export default function Home() {
+  // Emergency と Status を型として定義
+  type Emergency = "low" | "middle" | "high";
+  type Status = "pending" | "in progress" | "done";
+
+  // Task の型定義
+  type Task = {
+    id: number;
+    title: string;
+    description: string;
+    emergency: Emergency;
+    status: Status;
+  };
+
+  const [tasks, setTasks] = useState<Task[]>([]);
+
   return (
     <>
       <div className="h-screen flex flex-col item-center">
@@ -24,7 +45,7 @@ export default function Home() {
                     <CardDescription>what do you to do today</CardDescription>
                   </div>
 
-                  <Form />
+                  <Form setTasks={setTasks} />
                 </div>
               </ResizablePanel>
               <ResizableHandle withHandle />
@@ -33,7 +54,9 @@ export default function Home() {
           </ResizablePanel>
           <ResizableHandle withHandle />
 
-          <ResizablePanel>List</ResizablePanel>
+          <ResizablePanel>
+            <List tasks={tasks} setTasks={setTasks} />
+          </ResizablePanel>
         </ResizablePanelGroup>
       </div>
     </>

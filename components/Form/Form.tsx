@@ -24,20 +24,80 @@ import StatusIcon from "../StatusIcon";
 import { Textarea } from "../ui/textarea";
 import EmergencyIcon from "../EmergencyIcon";
 import { Button } from "../ui/button";
-const Form = () => {
+import { addtask, gettask } from "@/lib/supabasefunction";
+
+// Emergency と Status を型として定義
+type Emergency = "low" | "middle" | "high";
+type Status = "pending" | "in progress" | "done";
+
+// Task の型定義
+type Task = {
+  id: number;
+  title: string;
+  description: string;
+  emergency: Emergency;
+  status: Status;
+};
+
+type FormProps = {
+  setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
+};
+
+const Form: React.FC<FormProps> = ({ setTasks }) => {
   const form = useForm({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       title: "",
       description: "",
       emergency: "low",
-      status: "starting",
+      status: "pending",
     },
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // フォームの値を取得
+    const formValues = form.getValues();
+
+    // タスクを追加する関数
+    await addtask(
+      formValues.title,
+      formValues.description,
+      formValues.emergency,
+      formValues.status
+    );
+
+    // フォームの値をリセット
+    form.reset({
+      title: "",
+      description: "",
+      emergency: "",
+      status: "",
+    });
+
+    //=====================================================================================================================
+    // タスクを取得する関数
+    const fetchAllTask = async () => {
+      try {
+        const alltask = await gettask();
+        if (alltask.data) {
+          // データをStateに設定
+          setTasks(alltask.data);
+          console.log("取得したタスク:", alltask.data); // デバッグ用
+        } else {
+          console.error("タスクの取得に失敗しました:", alltask.error); // エラーをログ出力
+        }
+      } catch (error) {
+        console.error("データ取得中にエラーが発生しました:", error);
+      }
+    };
+
+    // タスクを追加し、取得する
+
+    await fetchAllTask();
   };
+
   return (
     <FormComp {...form}>
       <form className="space-y-2" onSubmit={handleSubmit}>
@@ -114,7 +174,9 @@ const Form = () => {
               </FormItem>
             )}
           />
-          <Button type="submit">Add task</Button>
+          <Button type="submit" onClick={handleSubmit}>
+            Add task
+          </Button>
         </div>
         {/* descriptiom */}
         <FormField
