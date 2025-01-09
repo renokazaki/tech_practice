@@ -24,7 +24,7 @@ import StatusIcon from "../StatusIcon";
 import { Textarea } from "../ui/textarea";
 import EmergencyIcon from "../EmergencyIcon";
 import { Button } from "../ui/button";
-import { addtask, gettask } from "@/lib/supabasefunction";
+import { addtask, getAlltask, getCategorytask } from "@/lib/supabasefunction";
 
 // Emergency と Status を型として定義
 type Emergency = "low" | "middle" | "high";
@@ -81,11 +81,16 @@ const Form: React.FC<FormProps> = ({ setTasks, selectcategory }) => {
     // タスクを取得する関数
     const fetchAllTask = async () => {
       try {
-        const alltask = await gettask();
+        let alltask;
+        // カテゴリがallまたは1の場合は全てのタスクを取得
+        if (selectcategory === "all" || selectcategory === "1") {
+          alltask = await getAlltask(1);
+        } else {
+          alltask = await getCategorytask(selectcategory);
+        }
         if (alltask.data) {
           // データをStateに設定
           setTasks(alltask.data);
-          // console.log("取得したタスク:", alltask.data); // デバッグ用
         } else {
           console.error("タスクの取得に失敗しました:", alltask.error); // エラーをログ出力
         }
