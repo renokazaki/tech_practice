@@ -2,10 +2,28 @@ import {supabase} from "./supabase"
 
 //=====================================================================================================================
 //Task取得用
+
+//全てのタスクを取得
 export const gettask = async () =>{
     const task = await supabase.from("Task").select("*").order("id", { ascending: true }); // idで昇順に並べる
     return task
 }
+
+//指定したカテゴリのタスクを取得
+export const getCategorytask = async (category_id:string) =>{
+
+         // category_id を数値に変換
+  const numericCategoryId = parseInt(category_id, 10);
+    const task = await supabase.from("Task").select("*").eq("category_id", numericCategoryId).order("id", { ascending: true }); // idで昇順に並べる
+    return task
+}
+
+//ALLのカテゴリのタスクを取得
+export const getAlltask = async (all:number) =>{
+const task = await supabase.from("Task").select("*").eq("all", all).order("id", { ascending: true }); // idで昇順に並べる
+return task
+}
+
 //task追加用
 export const addtask = async (title:string,description:string,emergency:string,status:string,category_id:string) =>{
       // category_id を数値に変換
