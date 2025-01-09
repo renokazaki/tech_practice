@@ -1,10 +1,8 @@
 "use client";
 
-import React from "react";
-import { gettask } from "@/lib/supabasefunction";
+import React, { useState } from "react";
+import { getAlltask, getCategorytask } from "@/lib/supabasefunction";
 import { useEffect } from "react";
-// import StatusIcon from "../StatusIcon";
-// import EmergencyIcon from "../EmergencyIcon";
 
 import {
   Table,
@@ -16,6 +14,7 @@ import {
 } from "@/components/ui/table";
 import EmergencyIcon from "../EmergencyIcon";
 import StatusIcon from "../StatusIcon";
+import Dialog from "./Dialog";
 
 // Emergency と Status を型として定義
 type Emergency = "low" | "middle" | "high";
@@ -33,18 +32,36 @@ type Task = {
 type ListProps = {
   tasks: Task[];
   setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
+  selectcategory: string;
 };
 
-export const List: React.FC<ListProps> = ({ tasks, setTasks }) => {
+export const List: React.FC<ListProps> = ({
+  tasks,
+  setTasks,
+  selectcategory,
+}) => {
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const handleDoubleClick = (task: Task) => {
+    setSelectedTask(task);
+    setIsDialogOpen(true);
+  };
+
   useEffect(() => {
     // タスクを取得する関数
     const fetchAllTask = async () => {
       try {
-        const alltask = await gettask();
+        let alltask;
+        // カテゴリがallまたは1の場合は全てのタスクを取得
+        if (selectcategory === "all" || selectcategory === "1") {
+          alltask = await getAlltask(1);
+        } else {
+          alltask = await getCategorytask(selectcategory);
+        }
         if (alltask.data) {
           // データをStateに設定
           setTasks(alltask.data as Task[]);
-          // console.log("取得したタスク:", alltask.data); // デバッグ用
         } else {
           console.error("タスクの取得に失敗しました:", alltask.error); // エラーをログ出力
         }
@@ -54,7 +71,7 @@ export const List: React.FC<ListProps> = ({ tasks, setTasks }) => {
     };
     // fetchAllTaskを呼び出す
     fetchAllTask();
-  }, []);
+  }, [isDialogOpen]);
 
   return (
     <div className="overflow-auto h-full w-full">
@@ -70,7 +87,10 @@ export const List: React.FC<ListProps> = ({ tasks, setTasks }) => {
         </TableHeader>
         <TableBody>
           {tasks.map((item) => (
-            <TableRow key={item.id}>
+            <TableRow
+              key={item.id}
+              onDoubleClick={() => handleDoubleClick(item)}
+            >
               <TableCell>{item.title}</TableCell>
               <TableCell>
                 <EmergencyIcon emergency={item.emergency} />
@@ -83,6 +103,13 @@ export const List: React.FC<ListProps> = ({ tasks, setTasks }) => {
           ))}
         </TableBody>
       </Table>
+
+      <Dialog
+        selectedTask={selectedTask}
+        setSelectedTask={setSelectedTask}
+        isDialogOpen={isDialogOpen}
+        setIsDialogOpen={setIsDialogOpen}
+      />
     </div>
   );
 };

@@ -46,6 +46,27 @@ export const addCategory = async (category:string) =>{
 }
 //=====================================================================================================================
 
+// Emergency と Status を型として定義
+type Emergency = "low" | "middle" | "high";
+type Status = "pending" | "in progress" | "done";
+
+// Task の型定義
+type Task = {
+  id: number;
+  title: string;
+  description: string;
+  emergency: Emergency;
+  status: Status;
+};
+
+//タスクの更新用関数
+export const updateTask = async (id:number, updatedData:Task) => {
+  await supabase.from('Task') // テーブル名を指定
+      .update(updatedData) // 更新するデータを渡す
+      .eq('id', id); // 条件（idが一致するレコードを更新）
+}
+
+
 
 
 //=====================================================================================================================

@@ -63,7 +63,11 @@ export default function Home() {
           <ResizableHandle withHandle />
 
           <ResizablePanel>
-            <List tasks={tasks} setTasks={setTasks} />
+            <List
+              tasks={tasks}
+              setTasks={setTasks}
+              selectcategory={selectcategory}
+            />
           </ResizablePanel>
         </ResizablePanelGroup>
       </div>
