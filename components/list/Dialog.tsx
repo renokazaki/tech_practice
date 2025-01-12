@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { updateTask } from "@/lib/supabasefunction";
+import { deleteTask, updateTask } from "@/lib/supabasefunction";
 
 // Emergency と Status を型として定義
 type Emergency = "low" | "middle" | "high";
@@ -28,6 +28,7 @@ type DaialogProps = {
   setSelectedTask: React.Dispatch<React.SetStateAction<Task | null>>;
   isDialogOpen: boolean;
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
 };
 
 const Dialog: React.FC<DaialogProps> = ({
@@ -35,6 +36,7 @@ const Dialog: React.FC<DaialogProps> = ({
   setSelectedTask,
   isDialogOpen,
   setIsDialogOpen,
+  setTasks,
 }) => {
   const handleChange = (field: keyof Task, value: string) => {
     if (selectedTask) {
@@ -52,6 +54,17 @@ const Dialog: React.FC<DaialogProps> = ({
     };
     // 更新処理を実行後編集後データ取得フラグの更新
     upadate();
+  };
+
+  const handleDelete = async () => {
+    if (selectedTask) {
+      await deleteTask(selectedTask.id);
+      // 削除成功時、タスクをリストから削除
+      setTasks((prevTasks) =>
+        prevTasks.filter((task) => task.id !== selectedTask.id)
+      );
+      setIsDialogOpen(false); // ダイアログを閉じる
+    }
   };
 
   return (
@@ -105,8 +118,11 @@ const Dialog: React.FC<DaialogProps> = ({
                   <option value="done">Done</option>
                 </select>
               </div>
-              <div className="flex justify-end gap-4">
-                <button className="bg-red-500 text-white py-2 px-4 rounded">
+              <div className="flex justify-between gap-4">
+                <button
+                  onClick={handleDelete}
+                  className="bg-red-500 text-white py-2 px-4 rounded"
+                >
                   Delete
                 </button>
                 <button

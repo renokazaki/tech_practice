@@ -1,7 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
-import { getAlltask, getCategorytask } from "@/lib/supabasefunction";
+import {
+  getAllSortTask,
+  getAlltask,
+  getCategorySortTask,
+  getCategorytask,
+} from "@/lib/supabasefunction";
 import { useEffect } from "react";
 
 import {
@@ -42,6 +47,7 @@ export const List: React.FC<ListProps> = ({
 }) => {
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [sortFlag, setSortFlag] = useState(false);
 
   const handleDoubleClick = (task: Task) => {
     setSelectedTask(task);
@@ -73,16 +79,49 @@ export const List: React.FC<ListProps> = ({
     fetchAllTask();
   }, [isDialogOpen]);
 
+  //タスクを並び替え
+  const handleSort = async (value: string) => {
+    let sortTask;
+    setSortFlag(!sortFlag);
+    // カテゴリがallまたは1の場合は全てのタスクを取得
+    if (selectcategory === "all" || selectcategory === "1") {
+      sortTask = await getAllSortTask(1, value, sortFlag);
+    } else {
+      sortTask = await getCategorySortTask(selectcategory, value, sortFlag);
+    }
+    if (sortTask.data) {
+      setTasks(sortTask.data as Task[]);
+    } else {
+      console.error("タスクの取得に失敗しました:", sortTask.error); // エラーをログ出力
+    }
+  };
+
   return (
     <div className="overflow-auto h-full w-full">
       {/* 親コンテナにスクロール設定 */}
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Title</TableHead>
-            <TableHead>Emergency</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Description</TableHead>
+            <TableHead
+              onClick={(e) => handleSort(e.currentTarget.textContent || "")}
+            >
+              Title
+            </TableHead>
+            <TableHead
+              onClick={(e) => handleSort(e.currentTarget.textContent || "")}
+            >
+              Emergency
+            </TableHead>
+            <TableHead
+              onClick={(e) => handleSort(e.currentTarget.textContent || "")}
+            >
+              Status
+            </TableHead>
+            <TableHead
+              onClick={(e) => handleSort(e.currentTarget.textContent || "")}
+            >
+              Description
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -109,6 +148,7 @@ export const List: React.FC<ListProps> = ({
         setSelectedTask={setSelectedTask}
         isDialogOpen={isDialogOpen}
         setIsDialogOpen={setIsDialogOpen}
+        setTasks={setTasks}
       />
     </div>
   );

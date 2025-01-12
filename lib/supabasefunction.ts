@@ -67,10 +67,35 @@ export const updateTask = async (id:number, updatedData:Task) => {
 }
 
 
+//タスク削除用=====================================================================================================================
 
-
+export const deleteTask = async (id: number) => {
+       await supabase
+        .from("Task") // テーブル名を指定
+        .delete()
+        .eq("id", id); // id が一致するデータを削除
+}
 //=====================================================================================================================
+//タスク並び替え用=====================================================================================================================
 
+// //ALLのカテゴリのタスクを並び替え
+export const getAllSortTask = async (all:number,orderValue:string,flag:boolean) =>{
+      // orderValue を小文字に変換
+  const lowerCaseOrderValue = orderValue.toLowerCase();
+    const task = await supabase.from("Task").select("*").eq("all", all).order(lowerCaseOrderValue, { ascending: flag }); // idで昇順に並べる
+    return task
+    }
+
+//指定したカテゴリのタスクを並び替え=====================================================================================================================
+export const getCategorySortTask = async (category_id:string ,orderValue:string ,flag:boolean) =>{
+    // category_id を数値に変換
+const numericCategoryId = parseInt(category_id, 10);
+  // orderValue を小文字に変換
+  const lowerCaseOrderValue = orderValue.toLowerCase();
+const task = await supabase.from("Task").select("*").eq("category_id", numericCategoryId).order(lowerCaseOrderValue, { ascending: flag }); // idで昇順に並べる
+return task
+}
+//=====================================================================================================================
 // //category内のtaskの詳細取得用
 // export const getCategoryDescription = async (category_Id : number) =>{
 //     const categoryDescription = await supabase
