@@ -88,7 +88,7 @@ const Dialog: React.FC<DaialogProps> = ({
           <DialogContent>
             <DialogDescription>Edit</DialogDescription>
             <DialogHeader>
-              <DialogTitle>Description</DialogTitle>
+              <DialogTitle>Details</DialogTitle>
             </DialogHeader>
             <div className="space-y-4">
               <div>
