@@ -1,6 +1,5 @@
 import React from "react";
 import Teams from "./Teams";
-import Links from "./Links";
 
 // Emergency と Status を型として定義
 type Emergency = "low" | "middle" | "high";
@@ -31,7 +30,6 @@ const Navbar: React.FC<CategoryProps> = ({
         setSelectCategory={setSelectCategory}
         setTasks={setTasks}
       />
-      <Links />
     </nav>
   );
 };

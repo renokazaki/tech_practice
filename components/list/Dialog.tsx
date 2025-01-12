@@ -8,6 +8,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
@@ -85,9 +86,9 @@ const Dialog: React.FC<DaialogProps> = ({
       {selectedTask && (
         <UIDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogContent>
-            <DialogDescription>詳細</DialogDescription>
+            <DialogDescription>Edit</DialogDescription>
             <DialogHeader>
-              <DialogTitle>Edit Task</DialogTitle>
+              <DialogTitle>Description</DialogTitle>
             </DialogHeader>
             <div className="space-y-4">
               <div>
@@ -104,7 +105,7 @@ const Dialog: React.FC<DaialogProps> = ({
                 <Textarea
                   value={selectedTask.description}
                   onChange={(e) => handleChange("description", e.target.value)}
-                  className="border p-2 w-full"
+                  className="border p-2 w-full resize-none"
                 />
               </div>
               <div>
@@ -140,18 +141,18 @@ const Dialog: React.FC<DaialogProps> = ({
                 </Select>
               </div>
               <div className="flex justify-between gap-4">
-                <button
+                <Button
                   onClick={handleDelete}
-                  className="bg-red-500 text-white py-2 px-4 rounded"
+                  className="py-2 px-4 bg-rose-500 text-white"
                 >
                   Delete
-                </button>
-                <button
+                </Button>
+                <Button
                   onClick={handleSave}
-                  className="bg-blue-500 text-white py-2 px-4 rounded"
+                  className="py-2 px-4 bg-sky-400 text-white"
                 >
                   Save
-                </button>
+                </Button>
               </div>
             </div>
           </DialogContent>
