@@ -16,6 +16,7 @@ import {
   getCategorytask,
 } from "@/lib/supabasefunction";
 import { Button } from "../ui/button";
+import CategoryDialog from "./CategoryDialog";
 type Category = {
   id: number;
   category: string;
@@ -44,6 +45,7 @@ const Teams: React.FC<SelectCategoryProps> = ({
   setTasks,
 }) => {
   const [category, setCategory] = useState<Category[]>([]);
+  const [isAdd, setIsAdd] = useState(false);
 
   useEffect(() => {
     // カテゴリを取得する関数
@@ -63,7 +65,7 @@ const Teams: React.FC<SelectCategoryProps> = ({
     };
     // fetchAllCategoryを呼び出す
     fetchAllCategory();
-  }, [selectCategory]);
+  }, [selectCategory, isAdd]);
 
   useEffect(() => {
     const fetchAllTask = async () => {
@@ -107,10 +109,11 @@ const Teams: React.FC<SelectCategoryProps> = ({
           ))}
         </SelectGroup>
 
-        <Button className="w-[180px] mt-2">
+        <Button className="w-[180px] mt-2" onClick={() => setIsAdd(true)}>
           <PlusIcon className=" flex justify-center " />
           create category
         </Button>
+        <CategoryDialog isAdd={isAdd} onClose={() => setIsAdd(false)} />
       </SelectContent>
     </Select>
   );

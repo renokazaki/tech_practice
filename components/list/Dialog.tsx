@@ -11,6 +11,15 @@ import {
 
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 import { deleteTask, updateTask } from "@/lib/supabasefunction";
 
@@ -51,12 +60,10 @@ const Dialog: React.FC<DaialogProps> = ({
   const handleSave = () => {
     const upadate = async () => {
       if (selectedTask) {
-        // タスクの更新処理（例：Supabaseに更新リクエストを送る）
         await updateTask(selectedTask.id, selectedTask);
         setIsDialogOpen(false);
       }
     };
-    // 更新処理を実行後編集後データ取得フラグの更新
     upadate();
     toast.success("Task updated successfully!");
   };
@@ -64,11 +71,10 @@ const Dialog: React.FC<DaialogProps> = ({
   const handleDelete = async () => {
     if (selectedTask) {
       await deleteTask(selectedTask.id);
-      // 削除成功時、タスクをリストから削除
       setTasks((prevTasks) =>
         prevTasks.filter((task) => task.id !== selectedTask.id)
       );
-      setIsDialogOpen(false); // ダイアログを閉じる
+      setIsDialogOpen(false);
       toast.success("Task deleted successfully!");
     }
   };
@@ -86,44 +92,52 @@ const Dialog: React.FC<DaialogProps> = ({
             <div className="space-y-4">
               <div>
                 <label className="text-white">Title:</label>
-                <input
+                <Input
                   type="text"
                   value={selectedTask.title}
                   onChange={(e) => handleChange("title", e.target.value)}
-                  className="border p-2 w-full text-black"
+                  className="border p-2 w-full"
                 />
               </div>
               <div>
                 <label className="text-white">Description:</label>
-                <textarea
+                <Textarea
                   value={selectedTask.description}
                   onChange={(e) => handleChange("description", e.target.value)}
-                  className="border p-2 w-full  text-black"
+                  className="border p-2 w-full"
                 />
               </div>
               <div>
                 <label className="text-white">Emergency:</label>
-                <select
-                  value={selectedTask.emergency}
-                  onChange={(e) => handleChange("emergency", e.target.value)}
-                  className="border p-2 w-full  text-black"
+                <Select
+                  onValueChange={(value) => handleChange("emergency", value)}
+                  defaultValue={selectedTask.emergency}
                 >
-                  <option value="low">Low</option>
-                  <option value="middle">Middle</option>
-                  <option value="high">High</option>
-                </select>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select Emergency" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="low">Low</SelectItem>
+                    <SelectItem value="middle">Middle</SelectItem>
+                    <SelectItem value="high">High</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
               <div>
                 <label className="text-white">Status:</label>
-                <select
-                  value={selectedTask.status}
-                  onChange={(e) => handleChange("status", e.target.value)}
-                  className="border p-2 w-full  text-black"
+                <Select
+                  onValueChange={(value) => handleChange("status", value)}
+                  defaultValue={selectedTask.status}
                 >
-                  <option value="pending">Pending</option>
-                  <option value="in progress">In Progress</option>
-                  <option value="done">Done</option>
-                </select>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select Status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="pending">Pending</SelectItem>
+                    <SelectItem value="in progress">In Progress</SelectItem>
+                    <SelectItem value="done">Done</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
               <div className="flex justify-between gap-4">
                 <button
