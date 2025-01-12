@@ -8,6 +8,10 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+
+import { Toaster } from "@/components/ui/sonner";
+import { toast } from "sonner";
+
 import { deleteTask, updateTask } from "@/lib/supabasefunction";
 
 // Emergency と Status を型として定義
@@ -54,6 +58,7 @@ const Dialog: React.FC<DaialogProps> = ({
     };
     // 更新処理を実行後編集後データ取得フラグの更新
     upadate();
+    toast.success("Task updated successfully!");
   };
 
   const handleDelete = async () => {
@@ -64,11 +69,13 @@ const Dialog: React.FC<DaialogProps> = ({
         prevTasks.filter((task) => task.id !== selectedTask.id)
       );
       setIsDialogOpen(false); // ダイアログを閉じる
+      toast.success("Task deleted successfully!");
     }
   };
 
   return (
     <>
+      <Toaster />
       {selectedTask && (
         <UIDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogContent>
