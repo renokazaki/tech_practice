@@ -2,7 +2,6 @@ import { Webhook } from 'svix'
 import { headers } from 'next/headers'
 import { WebhookEvent } from '@clerk/nextjs/server'
 import { prisma } from '@/lib/prisma'
-// import { PrismaClient } from '@prisma/client';
 
 export async function POST(req: Request) {
 
@@ -54,17 +53,26 @@ export async function POST(req: Request) {
    // ユーザー作成イベントの処理
    if (evt.type === 'user.created') {
     try {
-         // ユーザーをデータベースに挿入
-         await prisma.user.create({
-          data: {
-            userId: evt.data.id,
-            name:JSON.parse(body).data.username,
-            img:JSON.parse(body).data.image_url
-          },
-        });
-        return new Response ("success user create", {status :201})
+      // ユーザーをデータベースに挿入
+       await prisma.user.create({
+        data: {
+          userId: evt.data.id,
+          name: JSON.parse(body).data.username,
+          img: JSON.parse(body).data.image_url,
+        },
+      });
+
+      // ユーザー作成後、'all' カテゴリを自動的に作成して、そのユーザーに関連付け
+      await prisma.category.create({
+        data: {
+          id:  JSON.parse("all") ,// カテゴリ名を 'all' に設定
+          userId:  evt.data.id
+        },
+      });
+
+      return new Response("success user create", { status: 201 })
     } catch (err) {
-      console.error('Error inserting user into database:', err)
+      console.error('Error inserting user or category into database:', err)
       return new Response('Error: Database operation failed', { status: 500 })
     }
   }

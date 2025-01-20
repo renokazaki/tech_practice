@@ -1,6 +1,4 @@
-"use client";
-
-import Chart from "@/components/Chart/Chart";
+// import Chart from "@/components/Chart/Chart";
 import Form from "@/components/Form/Form";
 import { List } from "@/components/list/List";
 import Navbar from "@/components/navbar/Index";
@@ -11,33 +9,19 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import { useState } from "react";
 
 export default function Home() {
-  // Emergency と Status を型として定義
-  type Emergency = "low" | "middle" | "high";
-  type Status = "pending" | "in progress" | "done";
+  // const [tasks, setTasks] = useState<Task[]>([]);
 
-  // Task の型定義
-  type Task = {
-    id: number;
-    title: string;
-    description: string;
-    emergency: Emergency;
-    status: Status;
-  };
-
-  const [tasks, setTasks] = useState<Task[]>([]);
-
-  const [selectcategory, setSelectCategory] = useState<string>("all");
+  // const [selectcategory, setSelectCategory] = useState<string>("all");
 
   return (
     <>
       <div className="h-screen w-screen flex flex-col item-center">
         <Navbar
-          selectcategory={selectcategory}
-          setSelectCategory={setSelectCategory}
-          setTasks={setTasks}
+        // selectcategory={selectcategory}
+        // setSelectCategory={setSelectCategory}
+        // setTasks={setTasks}
         />
         <ResizablePanelGroup
           className="h-full w-full flex flex-col sm:flex-row border"
@@ -51,12 +35,12 @@ export default function Home() {
                     <CardTitle>Create New Task</CardTitle>
                     <CardDescription>what do you to do today</CardDescription>
                   </div>
-                  <Form setTasks={setTasks} selectcategory={selectcategory} />
+                  <Form />
                 </div>
               </ResizablePanel>
               <ResizableHandle withHandle />
               <ResizablePanel className="hidden sm:block">
-                <Chart tasks={tasks} />
+                {/* <Chart tasks={tasks} /> */}
               </ResizablePanel>
             </ResizablePanelGroup>
           </ResizablePanel>
@@ -64,9 +48,9 @@ export default function Home() {
 
           <ResizablePanel>
             <List
-              tasks={tasks}
-              setTasks={setTasks}
-              selectcategory={selectcategory}
+            // tasks={tasks}
+            // setTasks={setTasks}
+            // selectcategory={selectcategory}
             />
           </ResizablePanel>
         </ResizablePanelGroup>

@@ -15,33 +15,35 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid()) // Prismaの自動生成ID
-  userId    String   @unique // Clerkで管理される認証ID (外部ID)
-  name      String // ユーザー名 (任意)
+  id        String     @id @default(cuid())
+  userId    String     @unique // ClerkのuserIdを一意に設定
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  name      String
   img       String
   tasks     Task[] // ユーザーが持つタスク
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  category  Category[] // ユーザーが持つカテゴリの
 }
 
 model Task {
-  id          String   @id @default(cuid()) // タスクID
-  title       String // タスクのタイトル
-  description String? // タスクの説明 (任意)
-  status      String   @default("pending") // タスクの状態 (例: pending, in-progress, done)
-  emergency   String? // タスクの優先度 (例: low, middle, high)
-  user        User     @relation(fields: [userId], references: [id])
-  userId      String // Userモデルとの外部キー
-  category    Category @relation(fields: [categoryId], references: [id])
-  categoryId  String // Categoryモデルとの外部キー
+  id          String   @id @default(cuid())
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  title       String
+  emergency   String
+  status      String
+  description String
+  user        User     @relation(fields: [userId], references: [userId])
+  userId      String // Userモデルとの外部キー
+  category    Category @relation(fields: [categoryId], references: [id]) // idを参照するように変更
+  categoryId  String // Categoryのidを参照
 }
 
 model Category {
-  id        String   @id @default(cuid()) // カテゴリID
-  name      String // カテゴリ名 (例: Work, Personal)
-  tasks     Task[] // カテゴリに属するタスク
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id     String @id
+  userId String
+  user   User   @relation(fields: [userId], references: [userId])
+  tasks  Task[]
+
+  @@unique([id, userId]) // idとuserIdの組み合わせでユニーク制約
 }
