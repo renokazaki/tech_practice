@@ -17,7 +17,6 @@ datasource db {
 model User {
   id        String   @id @default(cuid()) // Prismaの自動生成ID
   userId    String   @unique // Clerkで管理される認証ID (外部ID)
-  email     String   @unique // ユーザーのメールアドレス
   name      String // ユーザー名 (任意)
   img       String
   tasks     Task[] // ユーザーが持つタスク
