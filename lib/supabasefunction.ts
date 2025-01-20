@@ -1,6 +1,14 @@
 import {supabase} from "./supabase"
 
 
+//登録時にUser作成
+export const createUser = async (userId:string,userName:string) =>{
+
+await supabase.from("User").insert({userId:userId,userName:userName})
+}
+
+
+
 // Emergency と Status を型として定義
 type Emergency = "low" | "middle" | "high";
 type Status = "pending" | "in progress" | "done";

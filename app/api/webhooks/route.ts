@@ -1,9 +1,12 @@
 import { Webhook } from 'svix'
 import { headers } from 'next/headers'
 import { WebhookEvent } from '@clerk/nextjs/server'
+import { createUser } from '@/lib/supabasefunction'
 // import { PrismaClient } from '@prisma/client';
 
 export async function POST(req: Request) {
+
+
   const SIGNING_SECRET = process.env.SIGNING_SECRET
 
   // const prisma = new PrismaClient();
@@ -50,21 +53,18 @@ export async function POST(req: Request) {
 
    // ユーザー作成イベントの処理
    if (evt.type === 'user.created') {
-    const userId = evt.data.id; // Clerk からの userId
+    const userId = evt.data.id
+    const username = evt.data.username || evt.data.first_name || 'Anonymous User'
     
     try {
-      // ユーザーをデータベースに挿入
-      // await prisma.user.create({
-      //   data: {
-      //     userId: userId,
-      //   },
-      //});
-      console.log(`User with ID ${userId} created successfully.`);
+      await createUser(userId, username)
+      console.log(`User with ID ${userId} and username ${username} created successfully.`)
     } catch (err) {
-      console.error('Error inserting user into database:', err);
-      return new Response('Error: Database operation failed', { status: 500 });
+      console.error('Error inserting user into database:', err)
+      return new Response('Error: Database operation failed', { status: 500 })
     }
   }
+
 
   return new Response('Webhook received', { status: 200 })
 }
