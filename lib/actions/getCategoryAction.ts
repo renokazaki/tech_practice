@@ -2,7 +2,6 @@
 
 import { auth } from "@clerk/nextjs/server";
 import { prisma } from "../prisma";
-// import { revalidatePath } from "next/cache";
 
 export async function getCategoryAction() {
   // ユーザー認証情報を取得
@@ -20,7 +19,6 @@ export async function getCategoryAction() {
           in: [userId],
         },
       },
-   // revalidatePath("/");
 
     });
     return tasks;

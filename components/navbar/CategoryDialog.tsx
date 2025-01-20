@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { addCategory } from "@/lib/supabasefunction";
+import { addCategoryAction } from "@/lib/actions/addCategoryAction";
 
 type CategoryDialogProps = {
   isAdd: boolean;
@@ -18,14 +18,12 @@ type CategoryDialogProps = {
 const CategoryDialog: React.FC<CategoryDialogProps> = ({ isAdd, onClose }) => {
   const [newCategory, setNewCategory] = useState("");
 
-  const handleAddCategory = async () => {
-    if (newCategory.trim() !== "") {
-      await addCategory(newCategory); // カテゴリを追加
-      setNewCategory(""); // 入力欄をリセット
-      onClose(); // ダイアログを閉じる
-    } else {
-      alert("カテゴリ名を入力してください。");
-    }
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    await addCategoryAction({ title: newCategory });
+    setNewCategory("");
+    onClose();
   };
 
   return (
@@ -37,7 +35,7 @@ const CategoryDialog: React.FC<CategoryDialogProps> = ({ isAdd, onClose }) => {
             Please enter the category name you want to add.
           </DialogDescription>
         </DialogHeader>
-        <div className="space-y-4">
+        <form onSubmit={onSubmit} className="space-y-4">
           <Input
             type="text"
             placeholder="category name"
@@ -45,9 +43,9 @@ const CategoryDialog: React.FC<CategoryDialogProps> = ({ isAdd, onClose }) => {
             onChange={(e) => setNewCategory(e.target.value)}
           />
           <div className="flex justify-end">
-            <Button onClick={handleAddCategory}>追加</Button>
+            <Button type="submit">追加</Button>
           </div>
-        </div>
+        </form>
       </DialogContent>
     </Dialog>
   );

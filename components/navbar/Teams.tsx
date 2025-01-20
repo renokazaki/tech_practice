@@ -9,15 +9,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { getCategoryAction } from "@/lib/actions/getCategoryAction";
-
-// import { PlusIcon } from "lucide-react";
-
-// import { Button } from "../ui/button";
-// import CategoryDialog from "./CategoryDialog";
+import CategoryAdd from "./CategoryAdd";
 
 export const Teams = async () => {
-  // const [isAdd, setIsAdd] = useState(false);
-
   const category = await getCategoryAction();
 
   return (
@@ -40,13 +34,8 @@ export const Teams = async () => {
           ) : (
             <div className="text-gray-500 px-4 py-2">No categories found</div>
           )}
+          <CategoryAdd />
         </SelectGroup>
-
-        {/* <Button className="w-[180px] mt-2" onClick={() => setIsAdd(true)}>
-          <PlusIcon className=" flex justify-center " />
-          create category
-        </Button>
-        <CategoryDialog isAdd={isAdd} onClose={() => setIsAdd(false)} /> */}
       </SelectContent>
     </Select>
   );
