@@ -5,6 +5,7 @@ import { auth } from "@clerk/nextjs/server";
 import { prisma } from "../prisma";
 import { revalidatePath } from "next/cache";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function addPostAction(data: any) {
   const {userId} =await auth()
 
