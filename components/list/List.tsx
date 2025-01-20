@@ -18,6 +18,7 @@ export const List = async () => {
   const tasks = await getPostAction();
   console.log(tasks);
   // tasksがnullまたはundefinedの場合、空配列を使用
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const safeTasks: any[] = tasks ?? [];
   return (
     <div className="overflow-y-auto h-full w-full">
