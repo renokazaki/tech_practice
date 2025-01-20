@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id        String   @id @default(cuid()) // Prismaの自動生成ID
+  userId    String   @unique // Clerkで管理される認証ID (外部ID)
+  email     String   @unique // ユーザーのメールアドレス
+  name      String // ユーザー名 (任意)
+  img       String
+  tasks     Task[] // ユーザーが持つタスク
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Task {
+  id          String   @id @default(cuid()) // タスクID
+  title       String // タスクのタイトル
+  description String? // タスクの説明 (任意)
+  status      String   @default("pending") // タスクの状態 (例: pending, in-progress, done)
+  emergency   String? // タスクの優先度 (例: low, middle, high)
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String // Userモデルとの外部キー
+  category    Category @relation(fields: [categoryId], references: [id])
+  categoryId  String // Categoryモデルとの外部キー
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Category {
+  id        String   @id @default(cuid()) // カテゴリID
+  name      String // カテゴリ名 (例: Work, Personal)
+  tasks     Task[] // カテゴリに属するタスク
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
