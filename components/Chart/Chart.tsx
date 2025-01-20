@@ -44,7 +44,6 @@ export const ChartComponent: React.FC<ListProps> = ({ tasks }) => {
           statusCounts.inProgress,
           statusCounts.done,
         ], // 各ステータスの数
-        // backgroundColor: ["#8abeb8", "#317168", "#0e2a24"], // セクションの色
         backgroundColor: ["#c7d2fe", "#6366f1", "#312e81"], // セクションの色
 
         weight: 100,

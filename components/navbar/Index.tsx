@@ -1,5 +1,6 @@
 import React from "react";
 import Teams from "./Teams";
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 
 // Emergency と Status を型として定義
 type Emergency = "low" | "middle" | "high";
@@ -30,6 +31,14 @@ const Navbar: React.FC<CategoryProps> = ({
         setSelectCategory={setSelectCategory}
         setTasks={setTasks}
       />
+      <SignedIn>
+        {/* Mount the UserButton component */}
+        <UserButton />
+      </SignedIn>
+      <SignedOut>
+        {/* Signed out users get sign in button */}
+        <SignInButton />
+      </SignedOut>
     </nav>
   );
 };
