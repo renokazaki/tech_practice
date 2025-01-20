@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Form as FormComp,
   FormControl,
@@ -26,15 +26,32 @@ import { Textarea } from "../ui/textarea";
 import EmergencyIcon from "../EmergencyIcon";
 import { Button } from "../ui/button";
 import { addPostAction } from "@/lib/actions/addPostAction";
+import { getCategory } from "@/lib/supabasefunction";
+
+interface Category {
+  id: string;
+  userid: string;
+}
 
 const Form = () => {
-  // 仮のカテゴリーリストを作成
-  const categories = [
-    { id: "test", name: "Work" },
-    { id: "2", name: "Personal" },
-    { id: "3", name: "Urgent" },
-    { id: "4", name: "Miscellaneous" },
-  ];
+  const [categories, setCategories] = useState<Category[]>([]);
+
+  //カテゴリの取得
+  useEffect(() => {
+    // useEffect でカテゴリーを非同期取得
+    const fetchCategories = async () => {
+      const response = await getCategory(); // getCategory の結果を取得
+
+      // response.data にカテゴリーが格納されていることを想定している
+      if (response && response.data) {
+        setCategories(response.data); // データをステートにセット
+      } else {
+        setCategories([]); // エラー時には空配列をセット
+      }
+    };
+
+    fetchCategories(); // カテゴリー取得関数を実行
+  }, []); // コンポーネントがマウントされた時のみ実行
 
   const form = useForm({
     resolver: zodResolver(FormSchema),
@@ -83,9 +100,9 @@ const Form = () => {
                   </FormControl>
                   <SelectContent>
                     <SelectGroup>
-                      {categories.map((category) => (
+                      {categories.map((category: Category) => (
                         <SelectItem key={category.id} value={category.id}>
-                          {category.name}
+                          {category.id}
                         </SelectItem>
                       ))}
                     </SelectGroup>

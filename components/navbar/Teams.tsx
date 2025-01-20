@@ -17,7 +17,7 @@ export const Teams = async () => {
   return (
     <Select>
       <SelectTrigger className="w-[180px]">
-        <SelectValue />
+        <SelectValue placeholder="all" />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>

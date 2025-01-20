@@ -13,7 +13,7 @@ export async function getCategoryAction() {
   }
 
   try {
-    const tasks = await prisma.category.findMany({
+    const category = await prisma.category.findMany({
       where: {
         userId: {
           in: [userId],
@@ -21,7 +21,7 @@ export async function getCategoryAction() {
       },
 
     });
-    return tasks;
+    return category;
   } catch (err) {
     console.error(err);
    
