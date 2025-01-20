@@ -75,7 +75,7 @@ export async function POST(req: Request) {
          // ユーザーをデータベースに挿入
          await prisma.user.update({
           where:{
-            id : evt.data.id
+            userId : evt.data.id
           },
           data: {
             name:JSON.parse(body).data.username,
