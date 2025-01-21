@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   Select,
@@ -8,15 +8,36 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { getCategoryAction } from "@/lib/actions/getCategoryAction";
 import CategoryAdd from "./CategoryAdd";
+import { Category } from "@/types/category";
 
-export const Teams = async () => {
-  const category = await getCategoryAction();
+export const Teams = () => {
+  const [category, setCategory] = useState<Category[]>([]); // データを保存するstate
+
+  // APIからデータを取得==========================================================-
+  useEffect(() => {
+    async function fetchCategory() {
+      try {
+        const response = await fetch("/api/category/get");
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error("API Error:", errorData);
+          throw new Error(errorData.details || "Failed to fetch data");
+        }
+        const data: { category: Category[] } = await response.json();
+        setCategory(data.category);
+      } catch (error) {
+        console.error("データの取得中にエラーが発生しました:", error);
+      }
+    }
+
+    fetchCategory();
+  }, []);
+  //==================================================================================
 
   return (
     <Select>
-      <SelectTrigger className="w-[180px]">
+      <SelectTrigger className="w-[150px]">
         <SelectValue placeholder="all" />
       </SelectTrigger>
       <SelectContent>

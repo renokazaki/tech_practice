@@ -6,7 +6,7 @@ import { prisma } from "../prisma";
 import { revalidatePath } from "next/cache";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function addPostAction(data: any) {
+export async function addPostAction(data: any,category:string) {
   const {userId} =await auth()
 
 if(!userId){
@@ -21,7 +21,7 @@ await prisma.task.create({
     emergency:data.emergency,
     status:data.status,
     userId:userId,
-    categoryId:data.category
+    categoryId:category
   }
 })
 

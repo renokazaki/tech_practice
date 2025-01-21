@@ -21,6 +21,7 @@ export async function getCategoryAction() {
       },
 
     });
+    console.log(category)
     return category;
   } catch (err) {
     console.error(err);

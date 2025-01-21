@@ -8,7 +8,6 @@ export async function POST(req: Request) {
 
   const SIGNING_SECRET = process.env.SIGNING_SECRET
 
-  // const prisma = new PrismaClient();
 
   if (!SIGNING_SECRET) {
     throw new Error('Error: Please add SIGNING_SECRET from Clerk Dashboard to .env or .env.local')

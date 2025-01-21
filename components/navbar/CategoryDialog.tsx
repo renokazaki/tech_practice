@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { addCategoryAction } from "@/lib/actions/addCategoryAction";
 
 type CategoryDialogProps = {
   isAdd: boolean;
@@ -18,13 +17,37 @@ type CategoryDialogProps = {
 const CategoryDialog: React.FC<CategoryDialogProps> = ({ isAdd, onClose }) => {
   const [newCategory, setNewCategory] = useState("");
 
-  const onSubmit = async (e: React.FormEvent) => {
+  // サーバーへのデータ送信
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    await addCategoryAction({ title: newCategory });
-    setNewCategory("");
-    onClose();
+    try {
+      const response = await fetch("/api/category/post", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: newCategory, // APIに渡すデータ
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Error submitting form:", errorData);
+      } else {
+        const result = await response.json();
+        console.log("Form submitted successfully:", result);
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
+
+    onClose(); // モーダルを閉じる
+    setNewCategory(""); // 入力フィールドをクリア
   };
+
+  //==============================================================
 
   return (
     <Dialog open={isAdd} onOpenChange={onClose}>

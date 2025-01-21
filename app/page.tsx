@@ -1,3 +1,4 @@
+"use client";
 // import Chart from "@/components/Chart/Chart";
 import Form from "@/components/Form/Form";
 import { List } from "@/components/list/List";
@@ -11,18 +12,10 @@ import {
 } from "@/components/ui/resizable";
 
 export default function Home() {
-  // const [tasks, setTasks] = useState<Task[]>([]);
-
-  // const [selectcategory, setSelectCategory] = useState<string>("all");
-
   return (
     <>
       <div className="h-screen w-screen flex flex-col item-center">
-        <Navbar
-        // selectcategory={selectcategory}
-        // setSelectCategory={setSelectCategory}
-        // setTasks={setTasks}
-        />
+        <Navbar />
         <ResizablePanelGroup
           className="h-full w-full flex flex-col sm:flex-row border"
           direction="horizontal"
@@ -47,11 +40,7 @@ export default function Home() {
           <ResizableHandle withHandle />
 
           <ResizablePanel>
-            <List
-            // tasks={tasks}
-            // setTasks={setTasks}
-            // selectcategory={selectcategory}
-            />
+            <List />
           </ResizablePanel>
         </ResizablePanelGroup>
       </div>

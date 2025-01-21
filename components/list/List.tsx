@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   Table,
@@ -10,16 +10,32 @@ import {
 } from "@/components/ui/table";
 import EmergencyIcon from "../EmergencyIcon";
 import StatusIcon from "../StatusIcon";
-// import Dialog from "./Dialog";
-import { getPostAction } from "@/lib/actions/getPostAction";
+import { Task } from "@/types/tasks";
 
-export const List = async () => {
-  // サーバー側でタスクを取得
-  const tasks = await getPostAction();
-  console.log(tasks);
-  // tasksがnullまたはundefinedの場合、空配列を使用
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const safeTasks: any[] = tasks ?? [];
+export const List = () => {
+  const [tasks, setTasks] = useState<Task[]>([]); // データを保存するstate
+
+  // APIからデータを取得==========================================================-
+  useEffect(() => {
+    async function fetchTasks() {
+      try {
+        const response = await fetch("/api/task/get");
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error("API Error:", errorData);
+          throw new Error(errorData.details || "Failed to fetch data");
+        }
+        const data: { tasks: Task[] } = await response.json();
+        setTasks(data.tasks);
+      } catch (error) {
+        console.error("データの取得中にエラーが発生しました:", error);
+      }
+    }
+
+    fetchTasks();
+  }, []);
+  //==================================================================================
+
   return (
     <div className="overflow-y-auto h-full w-full">
       {/* 親コンテナにスクロール設定 */}
@@ -33,8 +49,8 @@ export const List = async () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {safeTasks.length > 0 ? (
-            safeTasks.map((item) => (
+          {tasks.length > 0 ? (
+            tasks.map((item) => (
               <TableRow key={item.id}>
                 <TableCell>{item.title}</TableCell>
                 <TableCell>

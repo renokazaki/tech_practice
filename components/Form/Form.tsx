@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   Form as FormComp,
   FormControl,
@@ -25,53 +25,51 @@ import StatusIcon from "../StatusIcon";
 import { Textarea } from "../ui/textarea";
 import EmergencyIcon from "../EmergencyIcon";
 import { Button } from "../ui/button";
-import { addPostAction } from "@/lib/actions/addPostAction";
-import { getCategory } from "@/lib/supabasefunction";
-
-interface Category {
-  id: string;
-  userid: string;
-}
 
 const Form = () => {
-  const [categories, setCategories] = useState<Category[]>([]);
-
-  //カテゴリの取得
-  useEffect(() => {
-    // useEffect でカテゴリーを非同期取得
-    const fetchCategories = async () => {
-      const response = await getCategory(); // getCategory の結果を取得
-
-      // response.data にカテゴリーが格納されていることを想定している
-      if (response && response.data) {
-        setCategories(response.data); // データをステートにセット
-      } else {
-        setCategories([]); // エラー時には空配列をセット
-      }
-    };
-
-    fetchCategories(); // カテゴリー取得関数を実行
-  }, []); // コンポーネントがマウントされた時のみ実行
-
   const form = useForm({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       title: "",
-      category: "all",
       description: "",
       emergency: "low",
       status: "pending",
     },
   });
+
+  // サーバーへのデータ送信===========================================-
   const onSubmit = async (data: any) => {
-    await addPostAction(data);
-    form.reset();
+    try {
+      const response = await fetch("/api/task/post", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Error submitting form:", errorData);
+        alert("フォームの送信中にエラーが発生しました");
+      } else {
+        const result = await response.json();
+        console.log("Form submitted successfully:", result);
+        alert("フォームが正常に送信されました");
+        form.reset(); // フォームをリセット
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      alert("フォーム送信に失敗しました");
+    }
   };
+
+  //==============================================================
 
   return (
     <FormComp {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <div className="block  sm:flex items-center gap-3">
+        <div className="block sm:flex items-center gap-3">
           <FormField
             control={form.control}
             name="title"
@@ -85,32 +83,6 @@ const Form = () => {
             )}
           />
 
-          {/* category */}
-          <FormField
-            control={form.control}
-            name="category"
-            render={({ field }) => (
-              <FormItem>
-                <FormMessage />
-                <Select value={field.value} onValueChange={field.onChange}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="category" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectGroup>
-                      {categories.map((category: Category) => (
-                        <SelectItem key={category.id} value={category.id}>
-                          {category.id}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </FormItem>
-            )}
-          />
           {/* emergency */}
           <FormField
             control={form.control}
@@ -121,7 +93,7 @@ const Form = () => {
                 <Select value={field.value} onValueChange={field.onChange}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="emaegency" />
+                      <SelectValue placeholder="emergency" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -172,7 +144,7 @@ const Form = () => {
             )}
           />
         </div>
-        {/* descriptiom */}
+        {/* description */}
         <FormField
           control={form.control}
           name="description"
@@ -189,7 +161,7 @@ const Form = () => {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full ">
+        <Button type="submit" className="w-full">
           Add
         </Button>
       </form>

@@ -1,6 +1,6 @@
 import React from "react";
-import { Teams } from "./Teams";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+import { Teams } from "./Teams";
 
 const Navbar = () => {
   return (
