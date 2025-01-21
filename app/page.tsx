@@ -2,7 +2,7 @@
 // import Chart from "@/components/Chart/Chart";
 import Form from "@/components/Form/Form";
 import { List } from "@/components/list/List";
-import Navbar from "@/components/navbar/Index";
+import Navbar from "@/components/navbar/navbar";
 
 import { CardDescription, CardTitle } from "@/components/ui/card";
 import {
@@ -10,12 +10,28 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
+import { Category } from "@/types/category";
+// import { Task } from "@/types/tasks";
+import { useState } from "react";
 
 export default function Home() {
+  //formからtask追加フラグ
+  const [isAddTask, setIsAddTask] = useState<boolean>(false);
+  //navbarでカテゴリ選択管理
+  const [selectCategory, setSelectCategory] = useState<Category>({
+    id: "all", // 初期値として "all" を設定
+    userId: "", // apiで設定する
+  });
+
+  // const [tasks, setTasks] = useState<Task[]>([]); // データを保存するstate
+
   return (
     <>
       <div className="h-screen w-screen flex flex-col item-center">
-        <Navbar />
+        <Navbar
+          selectCategory={selectCategory}
+          setSelectCategory={setSelectCategory}
+        />
         <ResizablePanelGroup
           className="h-full w-full flex flex-col sm:flex-row border"
           direction="horizontal"
@@ -28,7 +44,10 @@ export default function Home() {
                     <CardTitle>Create New Task</CardTitle>
                     <CardDescription>what do you to do today</CardDescription>
                   </div>
-                  <Form />
+                  <Form
+                    setIsAddTask={setIsAddTask}
+                    selectCategory={selectCategory}
+                  />
                 </div>
               </ResizablePanel>
               <ResizableHandle withHandle />
@@ -40,7 +59,7 @@ export default function Home() {
           <ResizableHandle withHandle />
 
           <ResizablePanel>
-            <List />
+            <List isAddTask={isAddTask} selectCategory={selectCategory} />
           </ResizablePanel>
         </ResizablePanelGroup>
       </div>

@@ -1,10 +1,14 @@
 "use client";
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import { PlusIcon } from "lucide-react";
 
 import { Button } from "../ui/button";
 import CategoryDialog from "./CategoryDialog";
-const CategoryAdd = () => {
+const CategoryAdd = ({
+  setIsAddCategory,
+}: {
+  setIsAddCategory: Dispatch<SetStateAction<boolean>>;
+}) => {
   const [isAdd, setIsAdd] = useState(false);
 
   return (
@@ -13,7 +17,11 @@ const CategoryAdd = () => {
         <PlusIcon className=" flex justify-center " />
         create category
       </Button>
-      <CategoryDialog isAdd={isAdd} onClose={() => setIsAdd(false)} />
+      <CategoryDialog
+        isAdd={isAdd}
+        onClose={() => setIsAdd(false)}
+        setIsAddCategory={setIsAddCategory}
+      />
     </div>
   );
 };

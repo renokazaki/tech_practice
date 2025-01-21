@@ -11,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 
 import { Toaster } from "@/components/ui/sonner";
-import { toast } from "sonner";
+// import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -22,7 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { deleteTask, updateTask } from "@/lib/supabasefunction";
+// import { deleteTask, updateTask } from "@/lib/supabasefunction";
 
 // Emergency と Status を型として定義
 type Emergency = "low" | "middle" | "high";
@@ -50,7 +50,7 @@ const Dialog: React.FC<DaialogProps> = ({
   setSelectedTask,
   isDialogOpen,
   setIsDialogOpen,
-  setTasks,
+  // setTasks,
 }) => {
   const handleChange = (field: keyof Task, value: string) => {
     if (selectedTask) {
@@ -58,27 +58,27 @@ const Dialog: React.FC<DaialogProps> = ({
     }
   };
 
-  const handleSave = () => {
-    const upadate = async () => {
-      if (selectedTask) {
-        await updateTask(selectedTask.id, selectedTask);
-        setIsDialogOpen(false);
-      }
-    };
-    upadate();
-    toast.success("Task updated successfully!");
-  };
+  // const handleSave = () => {
+  //   const upadate = async () => {
+  //     if (selectedTask) {
+  //       await updateTask(selectedTask.id, selectedTask);
+  //       setIsDialogOpen(false);
+  //     }
+  //   };
+  //   upadate();
+  //   toast.success("Task updated successfully!");
+  // };
 
-  const handleDelete = async () => {
-    if (selectedTask) {
-      await deleteTask(selectedTask.id);
-      setTasks((prevTasks) =>
-        prevTasks.filter((task) => task.id !== selectedTask.id)
-      );
-      setIsDialogOpen(false);
-      toast.success("Task deleted successfully!");
-    }
-  };
+  // const handleDelete = async () => {
+  //   if (selectedTask) {
+  //     await deleteTask(selectedTask.id);
+  //     setTasks((prevTasks) =>
+  //       prevTasks.filter((task) => task.id !== selectedTask.id)
+  //     );
+  //     setIsDialogOpen(false);
+  //     toast.success("Task deleted successfully!");
+  //   }
+  // };
 
   return (
     <>
@@ -142,13 +142,13 @@ const Dialog: React.FC<DaialogProps> = ({
               </div>
               <div className="flex justify-between gap-4">
                 <Button
-                  onClick={handleDelete}
+                  // onClick={handleDelete}
                   className="py-2 px-4 bg-rose-500 text-white"
                 >
                   Delete
                 </Button>
                 <Button
-                  onClick={handleSave}
+                  // onClick={handleSave}
                   className="py-2 px-4 bg-sky-400 text-white"
                 >
                   Save

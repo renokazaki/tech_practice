@@ -11,15 +11,24 @@ import {
 import EmergencyIcon from "../EmergencyIcon";
 import StatusIcon from "../StatusIcon";
 import { Task } from "@/types/tasks";
-
-export const List = () => {
+import { Category } from "@/types/category";
+export const List = ({
+  isAddTask,
+  selectCategory,
+}: {
+  isAddTask: boolean;
+  selectCategory: Category;
+}) => {
   const [tasks, setTasks] = useState<Task[]>([]); // データを保存するstate
 
   // APIからデータを取得==========================================================-
   useEffect(() => {
     async function fetchTasks() {
       try {
-        const response = await fetch("/api/task/get");
+        // selectCategoryのIDをクエリパラメータとして追加
+        const url = `/api/task/get?categoryId=${selectCategory.id}`;
+
+        const response = await fetch(url);
         if (!response.ok) {
           const errorData = await response.json();
           console.error("API Error:", errorData);
@@ -33,12 +42,11 @@ export const List = () => {
     }
 
     fetchTasks();
-  }, []);
+  }, [isAddTask, selectCategory]); //タスク作成フラグまたは、選択しているカテゴリの値が変わった時にデータを再取得する
   //==================================================================================
 
   return (
     <div className="overflow-y-auto h-full w-full">
-      {/* 親コンテナにスクロール設定 */}
       <Table>
         <TableHeader>
           <TableRow>

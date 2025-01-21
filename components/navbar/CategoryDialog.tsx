@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -12,9 +12,14 @@ import { Button } from "@/components/ui/button";
 type CategoryDialogProps = {
   isAdd: boolean;
   onClose: () => void;
+  setIsAddCategory: Dispatch<SetStateAction<boolean>>;
 };
 
-const CategoryDialog: React.FC<CategoryDialogProps> = ({ isAdd, onClose }) => {
+const CategoryDialog: React.FC<CategoryDialogProps> = ({
+  isAdd,
+  onClose,
+  setIsAddCategory,
+}) => {
   const [newCategory, setNewCategory] = useState("");
 
   // サーバーへのデータ送信
@@ -42,7 +47,7 @@ const CategoryDialog: React.FC<CategoryDialogProps> = ({ isAdd, onClose }) => {
     } catch (error) {
       console.error("Error submitting form:", error);
     }
-
+    setIsAddCategory((prev) => !prev);
     onClose(); // モーダルを閉じる
     setNewCategory(""); // 入力フィールドをクリア
   };

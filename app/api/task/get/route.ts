@@ -3,7 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
   const {userId} =await auth()
 
@@ -13,41 +13,25 @@ export async function GET() {
         { status: 400 }
       );
     }
+    // URLからcategoryIdを取得
+    const { searchParams } = new URL(request.url);
+    const categoryId = searchParams.get("categoryId");
 
     // ユーザーに紐づくタスクとカテゴリを取得
     const tasks = await prisma.task.findMany({
       where: {
         userId: userId,
+        ...(categoryId ? { categoryId } : {}), // categoryIdが存在する場合のみ条件に追加
       },
-    //   include: {
-    //     category: true, // カテゴリ情報も含める
-    //   },
       orderBy: {
         createdAt: 'desc', // 作成日時の降順でソート
       },
     });
     console.log("Tasks fetched:", tasks);
 
-    // // ユーザーに紐づくカテゴリを取得
-    // const categories = await prisma.category.findMany({
-    //   where: {
-    //     userId: userId,
-    //   },
-    //   include: {
-    //     tasks: {
-    //       select: {
-    //         id: true,
-    //         title: true,
-    //         status: true,
-    //         emergency: true,
-    //       },
-    //     },
-    //   },
-    // });
 
     return NextResponse.json({
       tasks,
-    //   categories,
     });
 
   } catch (error) {

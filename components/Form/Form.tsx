@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import {
   Form as FormComp,
   FormControl,
@@ -25,8 +25,15 @@ import StatusIcon from "../StatusIcon";
 import { Textarea } from "../ui/textarea";
 import EmergencyIcon from "../EmergencyIcon";
 import { Button } from "../ui/button";
+import { Category } from "@/types/category";
 
-const Form = () => {
+const Form = ({
+  setIsAddTask,
+  selectCategory,
+}: {
+  setIsAddTask: Dispatch<SetStateAction<boolean>>;
+  selectCategory: Category;
+}) => {
   const form = useForm({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -40,7 +47,10 @@ const Form = () => {
   // サーバーへのデータ送信===========================================-
   const onSubmit = async (data: any) => {
     try {
-      const response = await fetch("/api/task/post", {
+      // selectCategoryのIDをクエリパラメータとして追加
+      const url = `/api/task/post?categoryId=${selectCategory.id}`;
+
+      const response = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -62,6 +72,7 @@ const Form = () => {
       console.error("Error submitting form:", error);
       alert("フォーム送信に失敗しました");
     }
+    setIsAddTask((prev) => !prev);
   };
 
   //==============================================================

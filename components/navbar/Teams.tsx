@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 import {
   Select,
@@ -11,8 +11,17 @@ import {
 import CategoryAdd from "./CategoryAdd";
 import { Category } from "@/types/category";
 
-export const Teams = () => {
-  const [category, setCategory] = useState<Category[]>([]); // データを保存するstate
+export const Teams = ({
+  selectCategory,
+  setSelectCategory,
+}: {
+  selectCategory: Category;
+  setSelectCategory: Dispatch<SetStateAction<Category>>;
+}) => {
+  // データを保存するstate
+  const [category, setCategory] = useState<Category[]>([]);
+  //Navbarからカテゴリ追加フラグ
+  const [isAddCategory, setIsAddCategory] = useState<boolean>(false);
 
   // APIからデータを取得==========================================================-
   useEffect(() => {
@@ -32,11 +41,21 @@ export const Teams = () => {
     }
 
     fetchCategory();
-  }, []);
+  }, [isAddCategory]);
   //==================================================================================
 
   return (
-    <Select>
+    <Select
+      value={selectCategory.id.toString()}
+      onValueChange={(value) => {
+        const selectedCategory = category.find(
+          (item) => item.id.toString() === value
+        );
+        if (selectedCategory) {
+          setSelectCategory(selectedCategory); // 選択したカテゴリをセット
+        }
+      }}
+    >
       <SelectTrigger className="w-[150px]">
         <SelectValue placeholder="all" />
       </SelectTrigger>
@@ -55,7 +74,7 @@ export const Teams = () => {
           ) : (
             <div className="text-gray-500 px-4 py-2">No categories found</div>
           )}
-          <CategoryAdd />
+          <CategoryAdd setIsAddCategory={setIsAddCategory} />
         </SelectGroup>
       </SelectContent>
     </Select>

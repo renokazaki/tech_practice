@@ -1,19 +1,7 @@
 import React from "react";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-
-// Emergency と Status を型として定義
-type Emergency = "low" | "middle" | "high";
-type Status = "pending" | "in progress" | "done";
-
-// Task の型定義
-type Task = {
-  id: number;
-  title: string;
-  description: string;
-  emergency: Emergency;
-  status: Status;
-};
+import { Task } from "@/types/tasks";
 
 type ListProps = {
   tasks: Task[];
