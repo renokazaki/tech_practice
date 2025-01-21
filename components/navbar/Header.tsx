@@ -3,7 +3,7 @@ import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import { Teams } from "./Teams";
 import { Category } from "@/types/category";
 
-const Navbar = ({
+const Header = ({
   selectCategory,
   setSelectCategory,
 }: {
@@ -32,4 +32,4 @@ const Navbar = ({
   );
 };
 
-export default Navbar;
+export default Header;

@@ -2,7 +2,7 @@
 // import Chart from "@/components/Chart/Chart";
 import Form from "@/components/Form/Form";
 import { List } from "@/components/list/List";
-import Navbar from "@/components/navbar/navbar";
+import Header from "@/components/navbar/Header";
 
 import { CardDescription, CardTitle } from "@/components/ui/card";
 import {
@@ -28,7 +28,7 @@ export default function Home() {
   return (
     <>
       <div className="h-screen w-screen flex flex-col item-center">
-        <Navbar
+        <Header
           selectCategory={selectCategory}
           setSelectCategory={setSelectCategory}
         />
