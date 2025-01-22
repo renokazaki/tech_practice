@@ -30,7 +30,7 @@ export const List = ({
     async function fetchTasks() {
       try {
         // selectCategoryのIDをクエリパラメータとして追加
-        const url = `/api/task/get?categoryId=${selectCategory.id}`;
+        const url = `/api/task/get?categoryId=${selectCategory.name}`;
 
         const response = await fetch(url);
         if (!response.ok) {

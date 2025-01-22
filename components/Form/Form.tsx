@@ -48,7 +48,7 @@ const Form = ({
   const onSubmit = async (data: any) => {
     try {
       // selectCategoryのIDをクエリパラメータとして追加
-      const url = `/api/task/post?categoryId=${selectCategory.id}`;
+      const url = `/api/task/post?categoryId=${selectCategory.name}`;
 
       const response = await fetch(url, {
         method: "POST",
