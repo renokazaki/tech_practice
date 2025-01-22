@@ -17,7 +17,7 @@ import { useState } from "react";
 export default function Home() {
   //formからtask追加フラグ
   const [isAddTask, setIsAddTask] = useState<boolean>(false);
-  //navbarでカテゴリ選択管理
+  //カテゴリ選択管理
   const [selectCategory, setSelectCategory] = useState<Category>({
     id: "",
     name: "all", // 初期値として "all" を設定

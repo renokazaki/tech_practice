@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useEffect } from "react";
 import {
   Form as FormComp,
   FormControl,
@@ -46,23 +46,38 @@ const Form = ({
     },
   });
 
+  // 初期ログイン時にのみカテゴリIDを取得し設定
+  useEffect(() => {
+    if (!selectCategory.id) {
+      const fetchCategory = async () => {
+        try {
+          // カテゴリIDを取得
+          const response = await fetch(`/api/category/get`);
+          const result = await response.json();
+          const category = result.category[0]; // category配列の最初の要素を取得
+          console.log("初期", category.id);
+
+          // 親コンポーネントの状態を更新
+          setSelectCategory((prev) => ({
+            ...prev, // 現在の状態のプロパティを保持
+            id: category.id, // idのみを更新
+          }));
+
+          if (!category.id) {
+            throw new Error("Category ID not found");
+          }
+        } catch (error) {
+          console.error("Error fetching category:", error);
+        }
+      };
+
+      fetchCategory();
+    }
+  }, []);
+
   // サーバーへのデータ送信===========================================-
   const onSubmit = async (data: any) => {
     try {
-      //初期ログイン時のみに、割り当てられたallのidを取得する必要があるため
-      if (!selectCategory.id) {
-        // カテゴリIDを取得
-        const response = await fetch(`/api/category/get`);
-        const result = await response.json();
-        const category = result.category[0]; // category配列の最初の要素を取得
-
-        if (!category.id) {
-          throw new Error("Category ID not found");
-        }
-        // 親コンポーネントの状態を更新
-        setSelectCategory(category.id); // idだけを設定
-      }
-
       //以降2回目のpost処理===============================================================================
       // selectCategoryのIDをクエリパラメータとして追加
       const url = `/api/task/post?categoryId=${selectCategory.id}`;
