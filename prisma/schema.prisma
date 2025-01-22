@@ -40,10 +40,11 @@ model Task {
 }
 
 model Category {
-  id     String @id
+  id     String @id @default(cuid()) // idをcuidで自動生成するように変更
+  name   String // 'all' などのカテゴリ名を保存
   userId String
   user   User   @relation(fields: [userId], references: [userId])
   tasks  Task[]
 
-  @@unique([id, userId]) // idとuserIdの組み合わせでユニーク制約
+  @@unique([name, userId]) // nameとuserIdの組み合わせでユニーク制約
 }

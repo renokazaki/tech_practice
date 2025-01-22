@@ -49,21 +49,14 @@ export async function POST(req: Request) {
           },
         });
 
-          // カテゴリを作成（既に存在する場合は何もしない）
-          await tx.category.upsert({
-            where: {
-              id_userId: {  // 複合ユニーク制約に基づいたwhere条件
-                id: 'all',
-                userId: evt.data.id,
-              },
-            },
-            create: {
-              id: 'all',
-              userId: evt.data.id,
-            },
-            update: {} // 既に存在する場合は更新しない
-          });
+        // カテゴリを作成
+        await tx.category.create({
+          data: {
+            name: 'all',  // 初期カテゴリとして'all'を設定
+            userId: evt.data.id,
+          },
         });
+      });
 
       return new Response('User and category created successfully', { status: 201 });
     } catch (err) {
@@ -78,7 +71,7 @@ export async function POST(req: Request) {
         where: { userId: evt.data.id },
         data: {
           name: JSON.parse(body).data.username,
-            img: JSON.parse(body).data.image_url,
+          img: JSON.parse(body).data.image_url,
         },
       });
 
