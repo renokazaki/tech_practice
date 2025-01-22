@@ -23,14 +23,12 @@ export const List = ({
   tasks: Task[];
   setTasks: Dispatch<SetStateAction<Task[]>>;
 }) => {
-  // const [tasks, setTasks] = useState<Task[]>([]); // データを保存するstate
-
   // APIからデータを取得==========================================================-
   useEffect(() => {
     async function fetchTasks() {
       try {
         // selectCategoryのIDをクエリパラメータとして追加
-        const url = `/api/task/get?categoryId=${selectCategory.name}`;
+        const url = `/api/task/get?categoryId=${selectCategory.id}`;
 
         const response = await fetch(url);
         if (!response.ok) {

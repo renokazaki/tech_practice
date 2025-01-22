@@ -62,9 +62,9 @@ export const Teams = ({
       <SelectContent>
         <SelectGroup>
           {category && category.length > 0 ? (
-            category.map((item, index) => (
+            category.map((item) => (
               <SelectItem
-                key={index}
+                key={item.id}
                 value={item.name.toString()}
                 className="cursor-pointer border-b-2"
               >

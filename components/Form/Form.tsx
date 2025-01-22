@@ -30,9 +30,11 @@ import { Category } from "@/types/category";
 const Form = ({
   setIsAddTask,
   selectCategory,
+  setSelectCategory,
 }: {
   setIsAddTask: Dispatch<SetStateAction<boolean>>;
   selectCategory: Category;
+  setSelectCategory: Dispatch<SetStateAction<Category>>;
 }) => {
   const form = useForm({
     resolver: zodResolver(FormSchema),
@@ -47,8 +49,24 @@ const Form = ({
   // サーバーへのデータ送信===========================================-
   const onSubmit = async (data: any) => {
     try {
+      if (!selectCategory.id) {
+        // カテゴリIDを取得
+        const response = await fetch(`/api/category/get`);
+        const result = await response.json();
+        const category = result.category[0]; // category配列の最初の要素を取得
+
+        console.log("初期のみ実行", category);
+
+        if (!category.id) {
+          throw new Error("Category ID not found");
+        }
+        // 親コンポーネントの状態を更新
+        setSelectCategory(category.id); // idだけを設定
+      }
+
       // selectCategoryのIDをクエリパラメータとして追加
-      const url = `/api/task/post?categoryId=${selectCategory.name}`;
+      const url = `/api/task/post?categoryId=${selectCategory.id}`;
+      console.log("Received categoryId:", selectCategory.id);
 
       const response = await fetch(url, {
         method: "POST",
