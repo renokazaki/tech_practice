@@ -33,7 +33,7 @@ const CategoryDialog: React.FC<CategoryDialogProps> = ({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          id: newCategory, // APIに渡すデータ
+          name: newCategory, // APIに渡すデータ
         }),
       });
 

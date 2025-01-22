@@ -46,10 +46,10 @@ export const Teams = ({
 
   return (
     <Select
-      value={selectCategory.id.toString()}
+      value={selectCategory.name.toString()}
       onValueChange={(value) => {
         const selectedCategory = category.find(
-          (item) => item.id.toString() === value
+          (item) => item.name.toString() === value
         );
         if (selectedCategory) {
           setSelectCategory(selectedCategory); // 選択したカテゴリをセット
@@ -65,10 +65,10 @@ export const Teams = ({
             category.map((item) => (
               <SelectItem
                 key={item.id}
-                value={item.id.toString()}
+                value={item.name.toString()}
                 className="cursor-pointer border-b-2"
               >
-                <div>{item.id}</div>
+                <div>{item.name}</div>
               </SelectItem>
             ))
           ) : (
