@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect } from "react";
 
 import {
   Table,
@@ -15,11 +15,15 @@ import { Category } from "@/types/category";
 export const List = ({
   isAddTask,
   selectCategory,
+  tasks,
+  setTasks,
 }: {
   isAddTask: boolean;
   selectCategory: Category;
+  tasks: Task[];
+  setTasks: Dispatch<SetStateAction<Task[]>>;
 }) => {
-  const [tasks, setTasks] = useState<Task[]>([]); // データを保存するstate
+  // const [tasks, setTasks] = useState<Task[]>([]); // データを保存するstate
 
   // APIからデータを取得==========================================================-
   useEffect(() => {
@@ -58,8 +62,8 @@ export const List = ({
         </TableHeader>
         <TableBody>
           {tasks.length > 0 ? (
-            tasks.map((item) => (
-              <TableRow key={item.id}>
+            tasks.map((item, index) => (
+              <TableRow key={index}>
                 <TableCell>{item.title}</TableCell>
                 <TableCell>
                   <EmergencyIcon emergency={item.emergency} />

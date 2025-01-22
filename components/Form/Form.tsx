@@ -61,11 +61,9 @@ const Form = ({
       if (!response.ok) {
         const errorData = await response.json();
         console.error("Error submitting form:", errorData);
-        alert("フォームの送信中にエラーが発生しました");
       } else {
         const result = await response.json();
         console.log("Form submitted successfully:", result);
-        alert("フォームが正常に送信されました");
         form.reset(); // フォームをリセット
       }
     } catch (error) {
@@ -76,6 +74,9 @@ const Form = ({
   };
 
   //==============================================================
+
+  // isSubmittingを取得し送信中にボタンの非活性
+  const { isSubmitting } = form.formState;
 
   return (
     <FormComp {...form}>
@@ -172,7 +173,7 @@ const Form = ({
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full">
+        <Button type="submit" className="w-full" disabled={isSubmitting}>
           Add
         </Button>
       </form>

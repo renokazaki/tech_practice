@@ -1,5 +1,5 @@
 "use client";
-// import Chart from "@/components/Chart/Chart";
+import Chart from "@/components/Chart/Chart";
 import Form from "@/components/Form/Form";
 import { List } from "@/components/list/List";
 import Header from "@/components/navbar/Header";
@@ -11,7 +11,7 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import { Category } from "@/types/category";
-// import { Task } from "@/types/tasks";
+import { Task } from "@/types/tasks";
 import { useState } from "react";
 
 export default function Home() {
@@ -20,10 +20,10 @@ export default function Home() {
   //navbarでカテゴリ選択管理
   const [selectCategory, setSelectCategory] = useState<Category>({
     id: "all", // 初期値として "all" を設定
-    userId: "", // apiで設定する
+    userId: "", // apiの処理の中で設定する
   });
 
-  // const [tasks, setTasks] = useState<Task[]>([]); // データを保存するstate
+  const [tasks, setTasks] = useState<Task[]>([]); // データを保存するstate
 
   return (
     <>
@@ -52,14 +52,18 @@ export default function Home() {
               </ResizablePanel>
               <ResizableHandle withHandle />
               <ResizablePanel className="hidden sm:block">
-                {/* <Chart tasks={tasks} /> */}
+                <Chart tasks={tasks} />
               </ResizablePanel>
             </ResizablePanelGroup>
           </ResizablePanel>
           <ResizableHandle withHandle />
-
           <ResizablePanel>
-            <List isAddTask={isAddTask} selectCategory={selectCategory} />
+            <List
+              isAddTask={isAddTask}
+              selectCategory={selectCategory}
+              tasks={tasks}
+              setTasks={setTasks}
+            />
           </ResizablePanel>
         </ResizablePanelGroup>
       </div>
