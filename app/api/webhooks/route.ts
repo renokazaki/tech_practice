@@ -1,102 +1,81 @@
-import { Webhook } from 'svix'
-import { headers } from 'next/headers'
-import { WebhookEvent } from '@clerk/nextjs/server'
-import { prisma } from '@/lib/prisma'
+import { Webhook } from 'svix';
+import { headers } from 'next/headers';
+import { WebhookEvent } from '@clerk/nextjs/server';
+import { prisma } from '@/lib/prisma';
 
 export async function POST(req: Request) {
-
-
-  const SIGNING_SECRET = process.env.SIGNING_SECRET
-
+  const SIGNING_SECRET = process.env.SIGNING_SECRET;
 
   if (!SIGNING_SECRET) {
-    throw new Error('Error: Please add SIGNING_SECRET from Clerk Dashboard to .env or .env.local')
+    throw new Error('Error: Please add SIGNING_SECRET from Clerk Dashboard to .env or .env.local');
   }
 
-  // Create new Svix instance with secret
-  const wh = new Webhook(SIGNING_SECRET)
+  const wh = new Webhook(SIGNING_SECRET);
+  const headerPayload = await headers();
+  const svix_id = headerPayload.get('svix-id');
+  const svix_timestamp = headerPayload.get('svix-timestamp');
+  const svix_signature = headerPayload.get('svix-signature');
 
-  // Get headers
-  const headerPayload = await headers()
-  const svix_id = headerPayload.get('svix-id')
-  const svix_timestamp = headerPayload.get('svix-timestamp')
-  const svix_signature = headerPayload.get('svix-signature')
-
-  // If there are no headers, error out
   if (!svix_id || !svix_timestamp || !svix_signature) {
-    return new Response('Error: Missing Svix headers', {
-      status: 400,
-    })
+    return new Response('Error: Missing Svix headers', { status: 400 });
   }
 
-  // Get body
-  const payload = await req.json()
-  const body = JSON.stringify(payload)
+  const payload = await req.json();
+  let evt: WebhookEvent;
 
-  let evt: WebhookEvent
-
-  // Verify payload with headers
   try {
-    evt = wh.verify(body, {
+    evt = wh.verify(JSON.stringify(payload), {
       'svix-id': svix_id,
       'svix-timestamp': svix_timestamp,
       'svix-signature': svix_signature,
-    }) as WebhookEvent
+    }) as WebhookEvent;
   } catch (err) {
-    console.error('Error: Could not verify webhook:', err)
-    return new Response('Error: Verification error', {
-      status: 400,
-    })
+    console.error('Error: Could not verify webhook:', (err as Error).message);
+    return new Response('Error: Verification error', { status: 400 });
   }
 
-   // ユーザー作成イベントの処理
-   if (evt.type === 'user.created') {
+  if (evt.type === 'user.created') {
     try {
-      // ユーザーをデータベースに挿入
-       await prisma.user.create({
+      await prisma.user.create({
         data: {
           userId: evt.data.id,
-          name: JSON.parse(body).data.username,
-          img: JSON.parse(body).data.image_url,
+          name: evt.data.username || 'Unnamed User',
+          img: evt.data.image_url || '',
         },
       });
 
-      // ユーザー作成後、'all' カテゴリを自動的に作成して、そのユーザーに関連付け
-      await prisma.category.create({
-        data: {
-          id:  JSON.parse("all") ,// カテゴリ名を 'all' に設定
-          userId:  evt.data.id
+      await prisma.category.upsert({
+        where: { id: 'all' },
+        update: {},
+        create: {
+          id: 'all',
+          userId: evt.data.id,
         },
       });
 
-      return new Response("success user create", { status: 201 })
+      return new Response('User created successfully', { status: 201 });
     } catch (err) {
       console.error('Error inserting user or category into database:', err)
-      return new Response('Error: Database operation failed', { status: 500 })
+      return new Response('Error: Database operation failed', { status: 500 })    
     }
   }
 
-   // ユーザー更新イベントの処理
-   if (evt.type === 'user.updated') {
+  if (evt.type === 'user.updated') {
     try {
-         // ユーザーをデータベースに挿入
-         await prisma.user.update({
-          where:{
-            userId : evt.data.id
-          },
-          data: {
-            name:JSON.parse(body).data.username,
-            img:JSON.parse(body).data.image_url
-          },
-        });
-        return new Response ("success user upadate", {status :201})
+      await prisma.user.update({
+        where: { userId: evt.data.id },
+        data: {
+          name: evt.data.username || 'Unnamed User',
+          img: evt.data.image_url || '',
+        },
+      });
+
+      return new Response('User updated successfully', { status: 200 });
     } catch (err) {
-      console.error('Error updating user into database:', err)
-      return new Response('Error: Database operation failed', { status: 500 })
+      console.error('Error updating user:', err);
+      return new Response('Error: Database operation failed', { status: 500 });
     }
   }
 
-
-
-  return new Response('Webhook received', { status: 200 })
+  return new Response('Webhook received', { status: 200 });
 }
