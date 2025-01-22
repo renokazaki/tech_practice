@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import {
   Dialog as UIDialog,
@@ -11,7 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 
 import { Toaster } from "@/components/ui/sonner";
-// import { toast } from "sonner";
+import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -21,21 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-// import { deleteTask, updateTask } from "@/lib/supabasefunction";
-
-// Emergency と Status を型として定義
-type Emergency = "low" | "middle" | "high";
-type Status = "pending" | "in progress" | "done";
-
-// Task の型定義
-type Task = {
-  id: number;
-  title: string;
-  description: string;
-  emergency: Emergency;
-  status: Status;
-};
+import { Task } from "@/types/tasks";
 
 type DaialogProps = {
   selectedTask: Task | null;
@@ -50,35 +34,84 @@ const Dialog: React.FC<DaialogProps> = ({
   setSelectedTask,
   isDialogOpen,
   setIsDialogOpen,
-  // setTasks,
+  setTasks,
 }) => {
+  //モーダルを開く処理=======================================================================
   const handleChange = (field: keyof Task, value: string) => {
     if (selectedTask) {
       setSelectedTask({ ...selectedTask, [field]: value });
     }
   };
 
-  // const handleSave = () => {
-  //   const upadate = async () => {
-  //     if (selectedTask) {
-  //       await updateTask(selectedTask.id, selectedTask);
-  //       setIsDialogOpen(false);
-  //     }
-  //   };
-  //   upadate();
-  //   toast.success("Task updated successfully!");
-  // };
+  //更新用処理=======================================================================
+  const handleSave = async () => {
+    if (selectedTask) {
+      try {
+        const response = await fetch(
+          `/api/task/put?selectedTaskId=${selectedTask.id}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(selectedTask),
+          }
+        );
 
-  // const handleDelete = async () => {
-  //   if (selectedTask) {
-  //     await deleteTask(selectedTask.id);
-  //     setTasks((prevTasks) =>
-  //       prevTasks.filter((task) => task.id !== selectedTask.id)
-  //     );
-  //     setIsDialogOpen(false);
-  //     toast.success("Task deleted successfully!");
-  //   }
-  // };
+        if (!response.ok) {
+          throw new Error("Failed to update task");
+        }
+
+        // 成功レスポンスから更新済みタスクを取得
+        const { data: updatedTask } = await response.json();
+
+        // ローカルタスクリストを更新
+        setTasks((prevTasks) =>
+          prevTasks.map((task) =>
+            task.id === updatedTask.id ? updatedTask : task
+          )
+        );
+
+        setIsDialogOpen(false);
+        toast.success("Task updated successfully!");
+      } catch (error) {
+        console.error(error);
+        toast.error("Error updating task");
+      }
+    }
+  };
+  //==========================================================================
+
+  //削除用処理=======================================================================
+
+  const handleDelete = async () => {
+    if (selectedTask) {
+      try {
+        const response = await fetch(
+          `/api/task/delete?selectedTaskId=${selectedTask.id}`,
+          {
+            method: "DELETE",
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to delete task");
+        }
+
+        setTasks((prevTasks) =>
+          prevTasks.filter((task) => task.id !== selectedTask.id)
+        );
+
+        setIsDialogOpen(false);
+        toast.success("Task deleted successfully!");
+      } catch (error) {
+        console.error(error);
+        toast.error("Error deleting task");
+      }
+    }
+  };
+
+  //==========================================================================
 
   return (
     <>
@@ -86,7 +119,7 @@ const Dialog: React.FC<DaialogProps> = ({
       {selectedTask && (
         <UIDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogContent>
-            <DialogDescription>Edit</DialogDescription>
+            <DialogDescription></DialogDescription>
             <DialogHeader>
               <DialogTitle>Details</DialogTitle>
             </DialogHeader>
@@ -142,13 +175,13 @@ const Dialog: React.FC<DaialogProps> = ({
               </div>
               <div className="flex justify-between gap-4">
                 <Button
-                  // onClick={handleDelete}
+                  onClick={handleDelete}
                   className="py-2 px-4 bg-rose-500 text-white"
                 >
                   Delete
                 </Button>
                 <Button
-                  // onClick={handleSave}
+                  onClick={handleSave}
                   className="py-2 px-4 bg-sky-400 text-white"
                 >
                   Save
