@@ -49,14 +49,21 @@ export async function POST(req: Request) {
           },
         });
 
-        // カテゴリを作成
-        await tx.category.create({
-          data: {
-            id: 'all',
-            userId: evt.data.id,
-          },
+          // カテゴリを作成（既に存在する場合は何もしない）
+          await tx.category.upsert({
+            where: {
+              id_userId: {  // 複合ユニーク制約に基づいたwhere条件
+                id: 'all',
+                userId: evt.data.id,
+              },
+            },
+            create: {
+              id: 'all',
+              userId: evt.data.id,
+            },
+            update: {} // 既に存在する場合は更新しない
+          });
         });
-      });
 
       return new Response('User and category created successfully', { status: 201 });
     } catch (err) {
@@ -70,8 +77,8 @@ export async function POST(req: Request) {
       await prisma.user.update({
         where: { userId: evt.data.id },
         data: {
-          name: evt.data.username || 'Unnamed User',
-          img: evt.data.image_url || '',
+          name: JSON.parse(body).data.username,
+            img: JSON.parse(body).data.image_url,
         },
       });
 
