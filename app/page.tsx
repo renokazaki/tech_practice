@@ -20,7 +20,7 @@ export default function Home() {
   //カテゴリ選択管理
   const [selectCategory, setSelectCategory] = useState<Category>({
     id: "",
-    name: "task", // 初期値として "task" を設定
+    name: "task", //初期値の設定
     userId: "", // apiの処理の中で設定する
   });
 

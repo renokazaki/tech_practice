@@ -52,7 +52,7 @@ export async function POST(req: Request) {
         // カテゴリを作成
         await tx.category.create({
           data: {
-            name: 'all',  // 初期カテゴリとして'all'を設定
+            name: 'task',  // 初期カテゴリとして'task'を設定
             userId: evt.data.id,
           },
         });
