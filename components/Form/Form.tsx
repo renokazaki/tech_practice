@@ -49,13 +49,12 @@ const Form = ({
   // サーバーへのデータ送信===========================================-
   const onSubmit = async (data: any) => {
     try {
+      //初期ログイン時のみに、割り当てられたallのidを取得する必要があるため
       if (!selectCategory.id) {
         // カテゴリIDを取得
         const response = await fetch(`/api/category/get`);
         const result = await response.json();
         const category = result.category[0]; // category配列の最初の要素を取得
-
-        console.log("初期のみ実行", category);
 
         if (!category.id) {
           throw new Error("Category ID not found");
@@ -64,6 +63,7 @@ const Form = ({
         setSelectCategory(category.id); // idだけを設定
       }
 
+      //以降2回目のpost処理===============================================================================
       // selectCategoryのIDをクエリパラメータとして追加
       const url = `/api/task/post?categoryId=${selectCategory.id}`;
       console.log("Received categoryId:", selectCategory.id);
