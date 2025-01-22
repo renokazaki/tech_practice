@@ -22,6 +22,8 @@ export async function POST(req: Request) {
 
   const payload = await req.json();
   let evt: WebhookEvent;
+  const body = JSON.stringify(payload)
+
 
   try {
     evt = wh.verify(JSON.stringify(payload), {
@@ -42,8 +44,8 @@ export async function POST(req: Request) {
         await tx.user.create({
           data: {
             userId: evt.data.id,
-            name: evt.data.username || 'Unnamed User',
-            img: evt.data.image_url || '',
+            name: JSON.parse(body).data.username,
+            img: JSON.parse(body).data.image_url,
           },
         });
 
