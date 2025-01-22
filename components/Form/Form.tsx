@@ -55,7 +55,7 @@ const Form = ({
           const response = await fetch(`/api/category/get`);
           const result = await response.json();
           const category = result.category[0]; // category配列の最初の要素を取得
-          console.log("初期", category.id);
+          // console.log("初期", category.id);
 
           // 親コンポーネントの状態を更新
           setSelectCategory((prev) => ({
