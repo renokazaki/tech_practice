@@ -19,7 +19,7 @@ export default function Home() {
   const [isAddTask, setIsAddTask] = useState<boolean>(false);
   //navbarでカテゴリ選択管理
   const [selectCategory, setSelectCategory] = useState<Category>({
-    id: "all", // 初期値として "all" を設定
+    name: "all", // 初期値として "all" を設定
     userId: "", // apiの処理の中で設定する
   });
 

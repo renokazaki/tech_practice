@@ -57,14 +57,14 @@ export const Teams = ({
       }}
     >
       <SelectTrigger className="w-[150px]">
-        <SelectValue placeholder="all" />
+        <SelectValue placeholder={selectCategory.name} />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
           {category && category.length > 0 ? (
-            category.map((item) => (
+            category.map((item, index) => (
               <SelectItem
-                key={item.id}
+                key={index}
                 value={item.name.toString()}
                 className="cursor-pointer border-b-2"
               >
