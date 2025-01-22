@@ -21,7 +21,7 @@ export async function POST(request: Request) {
     // Prismaを使用してデータを作成
     const activities = await prisma.category.create({
       data: {
-        id: id, 
+        name: id, 
         userId: userId,
       },
     });
