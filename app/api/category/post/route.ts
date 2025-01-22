@@ -16,12 +16,12 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { id } = body;    
+    const { name } = body;    
 
     // Prismaを使用してデータを作成
     const activities = await prisma.category.create({
       data: {
-        name: id, 
+        name: name, 
         userId: userId,
       },
     });
