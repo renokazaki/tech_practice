@@ -36,27 +36,30 @@ export async function POST(req: Request) {
 
   if (evt.type === 'user.created') {
     try {
-      await prisma.user.create({
-        data: {
-          userId: evt.data.id,
-          name: evt.data.username || 'Unnamed User',
-          img: evt.data.image_url || '',
-        },
+      // トランザクションを使用して、ユーザーとカテゴリの作成を原子的に行う
+      await prisma.$transaction(async (tx) => {
+        // ユーザーを作成
+        await tx.user.create({
+          data: {
+            userId: evt.data.id,
+            name: evt.data.username || 'Unnamed User',
+            img: evt.data.image_url || '',
+          },
+        });
+
+        // カテゴリを作成
+        await tx.category.create({
+          data: {
+            id: 'all',
+            userId: evt.data.id,
+          },
+        });
       });
 
-      await prisma.category.upsert({
-        where: { id: 'all' },
-        update: {},
-        create: {
-          id: 'all',
-          userId: evt.data.id,
-        },
-      });
-
-      return new Response('User created successfully', { status: 201 });
+      return new Response('User and category created successfully', { status: 201 });
     } catch (err) {
-      console.error('Error inserting user or category into database:', err)
-      return new Response('Error: Database operation failed', { status: 500 })    
+      console.error('Error inserting user or category into database:', err);
+      return new Response('Error: Database operation failed', { status: 500 });
     }
   }
 
