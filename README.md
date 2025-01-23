@@ -8,7 +8,7 @@
 ## 使用技術
 - **Next.js**
 - **TypeScript**
-- **Prisma**:(ORN)
+- **Prisma**:(ORM)
 - **Supabase**:(データベース)
 - **Clerk**: (ユーザー認証機能を提供するライブラリ)
 
