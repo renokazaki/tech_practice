@@ -22,7 +22,7 @@ const Header = ({
     <nav className="flex justify-between items-center px-2 py-2">
       <div className="flex items-center justify-center gap-4">
         <SignedIn>
-          <UserButton afterSignOutUrl="/sign-in" />
+          <UserButton />
         </SignedIn>
         <SignedOut>
           <SignInButton />
