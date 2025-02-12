@@ -13,6 +13,43 @@
 - **Clerk**: (ユーザー認証機能を提供するライブラリ)
 
 
+
+## テーブルのモデル
+
+erDiagram
+    User ||--o{ Task : "has"
+    User ||--o{ Category : "has"
+    Category ||--o{ Task : "contains"
+
+    User {
+        string id PK "cuid"
+        string userId UK "Clerk userId"
+        datetime createdAt
+        datetime updatedAt
+        string name
+        string img
+    }
+
+    Task {
+        string id PK "cuid"
+        datetime createdAt
+        datetime updatedAt
+        string title
+        string emergency
+        string status
+        string description
+        string userId FK
+        string categoryId FK
+    }
+
+    Category {
+        string id PK "cuid"
+        string name
+        string userId FK
+    }
+
+
+
 ## デモ
 以下のテスト用ユーザーでログインして機能をお試しいただけます：
 
