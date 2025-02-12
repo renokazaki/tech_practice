@@ -14,5 +14,10 @@
 
 
 ## デモ
+以下のテスト用ユーザーでログインして機能をお試しいただけます：
+
+- **ユーザー名**: testuser  
+- **パスワード**: TESTuser  
+
 以下のリンクからデプロイされたアプリをお試しいただけます：
 [タスク管理アプリ](https://task-management-application-sable.vercel.app/)
