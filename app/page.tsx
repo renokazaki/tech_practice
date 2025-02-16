@@ -4,71 +4,77 @@ import Form from "@/components/Form/Form";
 import { List } from "@/components/list/List";
 import Header from "@/components/navbar/Header";
 
-import { CardDescription, CardTitle } from "@/components/ui/card";
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "@/components/ui/resizable";
 import { Category } from "@/types/category";
 import { Task } from "@/types/tasks";
 import { useState } from "react";
 
 export default function Home() {
-  //formからtask追加フラグ
   const [isAddTask, setIsAddTask] = useState<boolean>(false);
-  //カテゴリ選択管理
   const [selectCategory, setSelectCategory] = useState<Category>({
     id: "",
-    name: "task", //初期値の設定
-    userId: "", // apiの処理の中で設定する
+    name: "task",
+    userId: "",
   });
-
-  const [tasks, setTasks] = useState<Task[]>([]); // データを保存するstate
+  const [tasks, setTasks] = useState<Task[]>([]);
 
   return (
-    <>
-      <div className="h-screen w-screen flex flex-col item-center">
-        <Header
-          selectCategory={selectCategory}
-          setSelectCategory={setSelectCategory}
-        />
-        <ResizablePanelGroup
-          className="h-full w-full flex flex-col sm:flex-row border"
-          direction="horizontal"
-        >
-          <ResizablePanel>
-            <ResizablePanelGroup direction="vertical">
-              <ResizablePanel>
-                <div className="h-full flex flex-col justify-center p-6 space-y-4">
-                  <div className="space-y-2 hidden sm:block">
-                    <CardTitle>Create New Task</CardTitle>
-                    <CardDescription>what do you to do today</CardDescription>
-                  </div>
-                  <Form
-                    setIsAddTask={setIsAddTask}
-                    selectCategory={selectCategory}
-                    setSelectCategory={setSelectCategory}
-                  />
-                </div>
-              </ResizablePanel>
-              <ResizableHandle withHandle />
-              <ResizablePanel className="hidden sm:block">
-                <Chart tasks={tasks} />
-              </ResizablePanel>
-            </ResizablePanelGroup>
-          </ResizablePanel>
-          <ResizableHandle withHandle />
-          <ResizablePanel>
-            <List
-              isAddTask={isAddTask}
-              selectCategory={selectCategory}
-              tasks={tasks}
-              setTasks={setTasks}
-            />
-          </ResizablePanel>
-        </ResizablePanelGroup>
+    <div className="h-screen w-screen flex flex-col overflow-hidden">
+      <Header
+        selectCategory={selectCategory}
+        setSelectCategory={setSelectCategory}
+      />
+
+      {/* Large screens */}
+      <div className="hidden lg:flex flex-row flex-1 min-h-0">
+        <div className="w-1/3 flex flex-col min-h-0">
+          <div className="flex-none h-1/2 p-4 border-b overflow-hidden">
+            <div className="h-full flex flex-col justify-center items-center">
+              <Form
+                setIsAddTask={setIsAddTask}
+                selectCategory={selectCategory}
+                setSelectCategory={setSelectCategory}
+              />
+            </div>
+          </div>
+
+          <div className="flex-none h-1/2 p-4 overflow-hidden">
+            <div className="h-full flex justify-center items-center">
+              <Chart tasks={tasks} />
+            </div>
+          </div>
+        </div>
+
+        <div className="w-2/3 overflow-y-auto p-4">
+          <List
+            isAddTask={isAddTask}
+            selectCategory={selectCategory}
+            tasks={tasks}
+            setTasks={setTasks}
+          />
+        </div>
       </div>
-    </>
+
+      {/* Small/Medium screens */}
+      <div className="lg:hidden flex flex-col flex-1 min-h-0">
+        <div className="flex-none w-full p-4">
+          <div className="w-full max-w-3xl mx-auto">
+            <Form
+              setIsAddTask={setIsAddTask}
+              selectCategory={selectCategory}
+              setSelectCategory={setSelectCategory}
+            />
+          </div>
+        </div>
+
+        <div className="flex-1 overflow-y-auto p-4">
+          <List
+            isAddTask={isAddTask}
+            selectCategory={selectCategory}
+            tasks={tasks}
+            setTasks={setTasks}
+          />
+        </div>
+      </div>
+    </div>
   );
 }

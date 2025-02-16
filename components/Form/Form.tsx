@@ -26,6 +26,7 @@ import { Textarea } from "../ui/textarea";
 import EmergencyIcon from "../EmergencyIcon";
 import { Button } from "../ui/button";
 import { Category } from "@/types/category";
+import { CardTitle } from "@/components/ui/card";
 
 const Form = ({
   setIsAddTask,
@@ -112,105 +113,110 @@ const Form = ({
   const { isSubmitting } = form.formState;
 
   return (
-    <FormComp {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <div className="block sm:flex items-center gap-3">
+    <>
+      <div className="pb-8 hidden lg:block">
+        <CardTitle>Task Management</CardTitle>
+      </div>
+      <FormComp {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <div className="flex items-center gap-3">
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem className="grow">
+                  <FormMessage />
+                  <FormControl>
+                    <Input placeholder="Title" {...field} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+
+            {/* emergency */}
+            <FormField
+              control={form.control}
+              name="emergency"
+              render={({ field }) => (
+                <FormItem>
+                  <FormMessage />
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="emergency" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem value="low">
+                          <EmergencyIcon emergency="low" />
+                        </SelectItem>
+                        <SelectItem value="middle">
+                          <EmergencyIcon emergency="middle" />
+                        </SelectItem>
+                        <SelectItem value="high">
+                          <EmergencyIcon emergency="high" />
+                        </SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
+            />
+            {/* status */}
+            <FormField
+              control={form.control}
+              name="status"
+              render={({ field }) => (
+                <FormItem className="grow">
+                  <FormMessage />
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="status" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem value="pending">
+                          <StatusIcon status="pending" />
+                        </SelectItem>
+                        <SelectItem value="in progress">
+                          <StatusIcon status="in progress" />
+                        </SelectItem>
+                        <SelectItem value="done">
+                          <StatusIcon status="done" />
+                        </SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
+            />
+          </div>
+          {/* description */}
           <FormField
             control={form.control}
-            name="title"
+            name="description"
             render={({ field }) => (
-              <FormItem className="grow">
+              <FormItem>
                 <FormMessage />
                 <FormControl>
-                  <Input placeholder="what do you need to do?" {...field} />
+                  <Textarea
+                    className="text-xs resize-none"
+                    placeholder="Description"
+                    {...field}
+                  />
                 </FormControl>
               </FormItem>
             )}
           />
-
-          {/* emergency */}
-          <FormField
-            control={form.control}
-            name="emergency"
-            render={({ field }) => (
-              <FormItem>
-                <FormMessage />
-                <Select value={field.value} onValueChange={field.onChange}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="emergency" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectItem value="low">
-                        <EmergencyIcon emergency="low" />
-                      </SelectItem>
-                      <SelectItem value="middle">
-                        <EmergencyIcon emergency="middle" />
-                      </SelectItem>
-                      <SelectItem value="high">
-                        <EmergencyIcon emergency="high" />
-                      </SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </FormItem>
-            )}
-          />
-          {/* status */}
-          <FormField
-            control={form.control}
-            name="status"
-            render={({ field }) => (
-              <FormItem className="grow">
-                <FormMessage />
-                <Select value={field.value} onValueChange={field.onChange}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="status" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectItem value="pending">
-                        <StatusIcon status="pending" />
-                      </SelectItem>
-                      <SelectItem value="in progress">
-                        <StatusIcon status="in progress" />
-                      </SelectItem>
-                      <SelectItem value="done">
-                        <StatusIcon status="done" />
-                      </SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </FormItem>
-            )}
-          />
-        </div>
-        {/* description */}
-        <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormMessage />
-              <FormControl>
-                <Textarea
-                  className="text-xs resize-none"
-                  placeholder="input description"
-                  {...field}
-                />
-              </FormControl>
-            </FormItem>
-          )}
-        />
-        <Button type="submit" className="w-full" disabled={isSubmitting}>
-          Add
-        </Button>
-      </form>
-    </FormComp>
+          <Button type="submit" className="w-full" disabled={isSubmitting}>
+            追加
+          </Button>
+        </form>
+      </FormComp>
+    </>
   );
 };
 
