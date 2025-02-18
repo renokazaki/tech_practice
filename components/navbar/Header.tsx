@@ -6,7 +6,7 @@ import {
   UserButton,
   useUser,
 } from "@clerk/nextjs";
-import { Teams } from "./Teams";
+import { Categories } from "./Categories";
 import { Category } from "@/types/category";
 
 const Header = ({
@@ -30,9 +30,9 @@ const Header = ({
         {user && (user.username || user.fullName || "User")}
       </div>
 
-      {/* Teams コンポーネント */}
+      {/* Categories コンポーネント */}
       <div className="flex items-end">
-        <Teams
+        <Categories
           selectCategory={selectCategory}
           setSelectCategory={setSelectCategory}
         />

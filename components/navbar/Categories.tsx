@@ -11,7 +11,7 @@ import {
 import CategoryAdd from "./CategoryAdd";
 import { Category } from "@/types/category";
 
-export const Teams = ({
+export const Categories = ({
   selectCategory,
   setSelectCategory,
 }: {
@@ -22,10 +22,11 @@ export const Teams = ({
   const [category, setCategory] = useState<Category[]>([]);
   //Navbarからカテゴリ追加フラグ
   const [isAddCategory, setIsAddCategory] = useState<boolean>(false);
-
+  const [loading, setLoading] = useState<boolean>(true); // ローディング状態
   // APIからデータを取得==========================================================-
   useEffect(() => {
     async function fetchCategory() {
+      setLoading(true);
       try {
         const response = await fetch("/api/category/get");
         if (!response.ok) {
@@ -37,6 +38,8 @@ export const Teams = ({
         setCategory(data.category);
       } catch (error) {
         console.error("データの取得中にエラーが発生しました:", error);
+      } finally {
+        setLoading(false);
       }
     }
 
@@ -55,7 +58,11 @@ export const Teams = ({
       }}
     >
       <SelectTrigger className="w-[150px]">
-        <SelectValue placeholder={selectCategory.name} />
+        {loading ? (
+          <div className="text-white">Loading...</div> // ローディング中の表示
+        ) : (
+          <SelectValue placeholder={selectCategory.name} />
+        )}
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
