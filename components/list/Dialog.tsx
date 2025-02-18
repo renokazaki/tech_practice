@@ -20,8 +20,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Task } from "@/types/tasks";
+import StatusIcon from "../StatusIcon";
+import EmergencyIcon from "../EmergencyIcon";
 
-type DaialogProps = {
+type DialogProps = {
   selectedTask: Task | null;
   setSelectedTask: React.Dispatch<React.SetStateAction<Task | null>>;
   isDialogOpen: boolean;
@@ -29,7 +31,7 @@ type DaialogProps = {
   setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
 };
 
-const Dialog: React.FC<DaialogProps> = ({
+const Dialog: React.FC<DialogProps> = ({
   selectedTask,
   setSelectedTask,
   isDialogOpen,
@@ -151,9 +153,15 @@ const Dialog: React.FC<DaialogProps> = ({
                     <SelectValue placeholder="Select Emergency" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="low">Low</SelectItem>
-                    <SelectItem value="middle">Middle</SelectItem>
-                    <SelectItem value="high">High</SelectItem>
+                    <SelectItem value="low">
+                      <EmergencyIcon emergency="low" />
+                    </SelectItem>
+                    <SelectItem value="middle">
+                      <EmergencyIcon emergency="middle" />
+                    </SelectItem>
+                    <SelectItem value="high">
+                      <EmergencyIcon emergency="high" />
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -167,9 +175,15 @@ const Dialog: React.FC<DaialogProps> = ({
                     <SelectValue placeholder="Select Status" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="pending">Pending</SelectItem>
-                    <SelectItem value="in progress">In Progress</SelectItem>
-                    <SelectItem value="done">Done</SelectItem>
+                    <SelectItem value="pending">
+                      <StatusIcon status="pending" />
+                    </SelectItem>
+                    <SelectItem value="in progress">
+                      <StatusIcon status="in progress" />
+                    </SelectItem>
+                    <SelectItem value="done">
+                      <StatusIcon status="done" />
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>

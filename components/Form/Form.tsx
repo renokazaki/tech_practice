@@ -114,12 +114,13 @@ const Form = ({
 
   return (
     <>
-      <div className="pb-8 hidden lg:block">
+      <div className="pb-16 hidden lg:block">
         <CardTitle>Task Management</CardTitle>
       </div>
       <FormComp {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <div className="flex items-center gap-3">
+            {/* Title */}
             <FormField
               control={form.control}
               name="title"
@@ -133,7 +134,7 @@ const Form = ({
               )}
             />
 
-            {/* emergency */}
+            {/* Emergency */}
             <FormField
               control={form.control}
               name="emergency"
@@ -163,7 +164,7 @@ const Form = ({
                 </FormItem>
               )}
             />
-            {/* status */}
+            {/* Status */}
             <FormField
               control={form.control}
               name="status"
@@ -194,7 +195,7 @@ const Form = ({
               )}
             />
           </div>
-          {/* description */}
+          {/* Description */}
           <FormField
             control={form.control}
             name="description"
@@ -212,7 +213,7 @@ const Form = ({
             )}
           />
           <Button type="submit" className="w-full" disabled={isSubmitting}>
-            追加
+            {isSubmitting ? "送信中" : "追加"}
           </Button>
         </form>
       </FormComp>

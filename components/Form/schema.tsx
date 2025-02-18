@@ -7,8 +7,14 @@ const Emergency = z.enum(["low", "middle", "high"]);
 const Status = z.enum(["pending", "in progress", "done"]);
 
 const FormSchema = z.object({
-  title: z.string().max(25),
-  description: z.string().max(100).optional(),
+  title: z
+    .string()
+    .min(1, "タイトルを入力してください")
+    .max(25, "タイトルは25文字以内で入力してください"),
+  description: z
+    .string()
+    .min(1, "詳細を入力してください")
+    .max(100, "説明は100文字以内で入力してください"),
   emergency: Emergency,
   status: Status,
 });

@@ -27,10 +27,11 @@ export const List = ({
 }) => {
   const [selectedTask, setSelectedTask] = useState<Task | null>(null); // 選択したtaskを保持
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false); // ダイアログフラグ
-
+  const [loading, setLoading] = useState<boolean>(true); // ローディング状態
   // APIからデータを取得==========================================================-
   useEffect(() => {
     async function fetchTasks() {
+      setLoading(true); // データ取得開始
       try {
         // selectCategoryのIDをクエリパラメータとして追加
         const url = `/api/task/get?categoryId=${selectCategory.id}`;
@@ -45,6 +46,8 @@ export const List = ({
         setTasks(data.tasks);
       } catch (error) {
         console.error("データの取得中にエラーが発生しました:", error);
+      } finally {
+        setLoading(false); // データ取得完了
       }
     }
 
@@ -103,7 +106,11 @@ export const List = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {tasks.length > 0 ? (
+          {loading ? ( // ローディング中の表示
+            <TableRow>
+              <TableCell colSpan={4}>Loading...</TableCell>
+            </TableRow>
+          ) : tasks.length > 0 ? (
             tasks.map((item, index) => (
               <TableRow
                 key={index}

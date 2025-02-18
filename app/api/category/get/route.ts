@@ -20,7 +20,6 @@ export async function GET() {
         userId: userId,
       },
     });
-    console.log("Category fetched:", category);
 
  
 

@@ -27,7 +27,6 @@ export async function GET(request: Request) {
         createdAt: 'desc', // 作成日時の降順でソート
       },
     });
-    console.log("Tasks fetched:", tasks);
 
 
     return NextResponse.json({
