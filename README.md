@@ -6,8 +6,9 @@
 また、保有しているタスクはグラフで進捗状況を可視化できるようにしています。(スマートフォンサイズでは表示の問題で非表示になります。)
 
 
-![スクリーンショット](./project-screenshot.png)
-![スクリーンショット](./project-screenshot2.png)
+![スクリーンショット](./images/project-screenshot.png)
+![スクリーンショット](./images/project-screenshot2.png)
+![スクリーンショット](./images/project-screenshot3.png)
 
 
 ## 今後追加検討の機能
