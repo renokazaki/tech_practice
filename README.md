@@ -7,6 +7,7 @@
 
 
 ![スクリーンショット](./project-screenshot.png)
+![スクリーンショット](./project-screenshot2.png)
 
 
 ## 今後追加検討の機能
