@@ -1,13 +1,11 @@
+import { Status } from "@/types/tasks";
 import React from "react";
-import { TasksStatus } from "./Form/schema";
 
-type props = {
-  status: TasksStatus;
+type statusProps = {
+  status: Status;
 };
 
-const StatusIcon = (props: props) => {
-  const { status } = props;
-
+const StatusIcon = ({ status }: statusProps) => {
   if (status === "pending") {
     return (
       <div className="flex items-center gap-2">
