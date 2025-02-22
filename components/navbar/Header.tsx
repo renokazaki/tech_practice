@@ -2,7 +2,7 @@ import React, { Dispatch, SetStateAction } from "react";
 import {
   SignedIn,
   SignedOut,
-  SignOutButton,
+  SignInButton,
   UserButton,
   useUser,
 } from "@clerk/nextjs";
@@ -25,7 +25,7 @@ const Header = ({
           <UserButton />
         </SignedIn>
         <SignedOut>
-          <SignOutButton redirectUrl="/sign-in" />
+          <SignInButton />
         </SignedOut>
         {user && (user.username || user.fullName || "User")}
       </div>
