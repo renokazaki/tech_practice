@@ -1,7 +1,11 @@
 export interface Task {
-    id:string;
-    title: string;
-    emergency: "low" | "middle" | "high";
-    status: "pending" | "in progress" | "done";
-    description: string;
-  }
+  id: string;
+  title: string;
+  emergency: Emergency;
+  status: Status;
+  description: string;
+}
+
+export type Emergency = "low" | "middle" | "high";
+
+export type Status = "pending" | "in progress" | "done";

@@ -126,7 +126,7 @@ const Form = ({
               name="title"
               render={({ field }) => (
                 <FormItem className="grow">
-                  <FormMessage />
+                  <FormMessage className="text-red-500" />
                   <FormControl>
                     <Input placeholder="Title" {...field} />
                   </FormControl>
@@ -201,7 +201,7 @@ const Form = ({
             name="description"
             render={({ field }) => (
               <FormItem>
-                <FormMessage />
+                <FormMessage className="text-red-500" />
                 <FormControl>
                   <Textarea
                     className="text-xs resize-none"

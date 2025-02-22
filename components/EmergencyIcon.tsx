@@ -1,12 +1,11 @@
+import { Emergency } from "@/types/tasks";
 import React from "react";
 
-type props = {
-  emergency: string;
+type EmergencyProps = {
+  emergency: Emergency;
 };
 
-const EmergencyIcon = (props: props) => {
-  const { emergency } = props;
-
+const EmergencyIcon = ({ emergency }: EmergencyProps) => {
   if (emergency === "low") {
     return (
       <div className="flex items-center gap-2 text-emerald-600">
