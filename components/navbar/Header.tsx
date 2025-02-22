@@ -25,7 +25,7 @@ const Header = ({
           <UserButton />
         </SignedIn>
         <SignedOut>
-          <SignInButton />
+          <SignInButton>ログインしてください</SignInButton>
         </SignedOut>
         {user && (user.username || user.fullName || "User")}
       </div>
