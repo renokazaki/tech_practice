@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 
 import {
   Select,
@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/select";
 import CategoryAdd from "./CategoryAdd";
 import { Category } from "@/types/category";
+import { useGetCategory } from "./hooks/useGetCotegory";
 
 export const Categories = ({
   selectCategory,
@@ -18,40 +19,17 @@ export const Categories = ({
   selectCategory: Category;
   setSelectCategory: Dispatch<SetStateAction<Category>>;
 }) => {
-  // データを保存するstate
-  const [category, setCategory] = useState<Category[]>([]);
-  //Navbarからカテゴリ追加フラグ
-  const [isAddCategory, setIsAddCategory] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true); // ローディング状態
-  // APIからデータを取得==========================================================-
-  useEffect(() => {
-    async function fetchCategory() {
-      setLoading(true);
-      try {
-        const response = await fetch("/api/category/get");
-        if (!response.ok) {
-          const errorData = await response.json();
-          console.error("API Error:", errorData);
-          throw new Error(errorData.details || "Failed to fetch data");
-        }
-        const data: { category: Category[] } = await response.json();
-        setCategory(data.category);
-      } catch (error) {
-        console.error("データの取得中にエラーが発生しました:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchCategory();
-  }, [isAddCategory]);
   //==================================================================================
+
+  const { category, setIsAddCategory, loading } = useGetCategory();
 
   return (
     <Select
       value={selectCategory.name}
       onValueChange={(value) => {
-        const selectedCategory = category.find((item) => item.name === value);
+        const selectedCategory = category.find(
+          (item: Category) => item.name === value
+        );
         if (selectedCategory) {
           setSelectCategory(selectedCategory); // 選択したカテゴリをセット
         }
@@ -67,7 +45,7 @@ export const Categories = ({
       <SelectContent>
         <SelectGroup>
           {category && category.length > 0 ? (
-            category.map((item) => (
+            category.map((item: Category) => (
               <SelectItem
                 key={item.id}
                 value={item.name}
