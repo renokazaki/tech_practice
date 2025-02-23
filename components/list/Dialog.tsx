@@ -38,8 +38,6 @@ const Dialog: React.FC<DialogProps> = ({
   setIsDialogOpen,
   setTasks,
 }) => {
-  //==========================================================================
-
   const { handleChange, handleSave, handleDelete } = useHandleDialog({
     selectedTask,
     setSelectedTask,

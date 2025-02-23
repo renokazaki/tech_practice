@@ -16,7 +16,7 @@ const Header = ({
   selectCategory: Category;
   setSelectCategory: Dispatch<SetStateAction<Category>>;
 }) => {
-  const { user } = useUser(); // Clerkからユーザー情報を取得
+  const { user } = useUser();
 
   return (
     <nav className="flex justify-between items-center px-2 py-2">
@@ -30,7 +30,6 @@ const Header = ({
         {user && (user.username || user.fullName || "User")}
       </div>
 
-      {/* Categories コンポーネント */}
       <div className="flex items-end">
         <Categories
           selectCategory={selectCategory}

@@ -8,12 +8,9 @@ type UseGetCategory = {
 };
 
 export const useGetCategory = (): UseGetCategory => {
-  // データを保存するstate
   const [category, setCategory] = useState<Category[]>([]);
-  //Navbarからカテゴリ追加フラグ
   const [isAddCategory, setIsAddCategory] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true); // ローディング状態
-  // APIからデータを取得==========================================================-
+  const [loading, setLoading] = useState<boolean>(true);
   useEffect(() => {
     async function fetchCategory() {
       setLoading(true);

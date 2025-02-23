@@ -25,7 +25,6 @@ const CategoryDialog: React.FC<CategoryDialogProps> = ({
     onClose,
     setIsAddCategory,
   });
-  //==============================================================
 
   return (
     <Dialog open={isAdd} onOpenChange={onClose}>

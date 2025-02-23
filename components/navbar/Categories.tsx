@@ -19,8 +19,6 @@ export const Categories = ({
   selectCategory: Category;
   setSelectCategory: Dispatch<SetStateAction<Category>>;
 }) => {
-  //==================================================================================
-
   const { category, setIsAddCategory, loading } = useGetCategory();
 
   return (
@@ -31,13 +29,13 @@ export const Categories = ({
           (item: Category) => item.name === value
         );
         if (selectedCategory) {
-          setSelectCategory(selectedCategory); // 選択したカテゴリをセット
+          setSelectCategory(selectedCategory);
         }
       }}
     >
       <SelectTrigger className="w-[150px]">
         {loading ? (
-          <div className="text-white">Loading...</div> // ローディング中の表示
+          <div className="text-white">Loading...</div>
         ) : (
           <SelectValue placeholder="task" />
         )}

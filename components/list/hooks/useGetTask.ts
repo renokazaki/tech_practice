@@ -2,7 +2,6 @@ import { Category } from "@/types/category";
 import { Task } from "@/types/tasks";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
-// フックの引数の型定義
 type UseGetTaskProps = {
   selectCategory: Category;
   setTasks: Dispatch<SetStateAction<Task[]>>;
@@ -22,15 +21,13 @@ export const useGetTask = ({
   setTasks,
   isAddTask,
 }: UseGetTaskProps): UseGetTaskReturn => {
-  const [selectedTask, setSelectedTask] = useState<Task | null>(null); // 選択したtaskを保持
-  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false); // ダイアログフラグ
-  const [loading, setLoading] = useState<boolean>(true); // ローディング状態
-  // APIからデータを取得==========================================================-
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   useEffect(() => {
     async function fetchTasks() {
-      setLoading(true); // データ取得開始
+      setLoading(true);
       try {
-        // selectCategoryのIDをクエリパラメータとして追加
         const url = `/api/task/get?categoryId=${selectCategory.id}`;
 
         const response = await fetch(url);
@@ -44,12 +41,12 @@ export const useGetTask = ({
       } catch (error) {
         console.error("データの取得中にエラーが発生しました:", error);
       } finally {
-        setLoading(false); // データ取得完了
+        setLoading(false);
       }
     }
 
     fetchTasks();
-  }, [isAddTask, selectCategory]); //タスク作成フラグまたは、選択しているカテゴリの値が変わった時にデータを再取得する
+  }, [isAddTask, selectCategory]);
 
   return {
     selectedTask,
