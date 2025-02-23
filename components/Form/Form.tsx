@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import React, { Dispatch, SetStateAction, useEffect } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import {
   Form as FormComp,
   FormControl,
@@ -9,9 +9,6 @@ import {
   FormMessage,
 } from "../ui/form";
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import FormSchema from "./schema";
 import { Input } from "../ui/input";
 import {
   Select,
@@ -27,6 +24,8 @@ import EmergencyIcon from "../EmergencyIcon";
 import { Button } from "../ui/button";
 import { Category } from "@/types/category";
 import { CardTitle } from "@/components/ui/card";
+import { usePostTask } from "./hooks/usePostTask";
+import { useFirstGetCategory } from "../navbar/hooks/useFirstGetCategory";
 
 const Form = ({
   setIsAddTask,
@@ -37,80 +36,14 @@ const Form = ({
   selectCategory: Category;
   setSelectCategory: Dispatch<SetStateAction<Category>>;
 }) => {
-  const form = useForm({
-    resolver: zodResolver(FormSchema),
-    defaultValues: {
-      title: "",
-      description: "",
-      emergency: "low",
-      status: "pending",
-    },
+  const { onSubmit, form, isSubmitting } = usePostTask({
+    selectCategory,
+    setIsAddTask,
   });
 
-  // 初期ログイン時にのみカテゴリIDを取得し設定
-  useEffect(() => {
-    if (!selectCategory.id) {
-      const fetchCategory = async () => {
-        try {
-          // カテゴリIDを取得
-          const response = await fetch(`/api/category/get`);
-          const result = await response.json();
-          const category = result.category[0]; // category配列の最初の要素を取得
-          // console.log("初期", category.id);
-
-          // 親コンポーネントの状態を更新
-          setSelectCategory((prev) => ({
-            ...prev, // 現在の状態のプロパティを保持
-            id: category.id, // idのみを更新
-          }));
-
-          if (!category.id) {
-            throw new Error("Category ID not found");
-          }
-        } catch (error) {
-          console.error("Error fetching category:", error);
-        }
-      };
-
-      fetchCategory();
-    }
-  }, []);
-
-  // サーバーへのデータ送信===========================================-
-  const onSubmit = async (data: any) => {
-    try {
-      //以降2回目のpost処理===============================================================================
-      // selectCategoryのIDをクエリパラメータとして追加
-      const url = `/api/task/post?categoryId=${selectCategory.id}`;
-      console.log("Received categoryId:", selectCategory.id);
-
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error("Error submitting form:", errorData);
-      } else {
-        const result = await response.json();
-        console.log("Form submitted successfully:", result);
-        form.reset(); // フォームをリセット
-      }
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      alert("フォーム送信に失敗しました");
-    }
-    setIsAddTask((prev) => !prev);
-  };
+  useFirstGetCategory({ selectCategory, setSelectCategory });
 
   //==============================================================
-
-  // isSubmittingを取得し送信中にボタンの非活性
-  const { isSubmitting } = form.formState;
 
   return (
     <>

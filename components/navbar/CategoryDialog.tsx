@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import {
   Dialog,
   DialogContent,
@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { usePostCategory } from "./hooks/usePostCategory";
 
 type CategoryDialogProps = {
   isAdd: boolean;
@@ -20,38 +21,10 @@ const CategoryDialog: React.FC<CategoryDialogProps> = ({
   onClose,
   setIsAddCategory,
 }) => {
-  const [newCategory, setNewCategory] = useState("");
-
-  // サーバーへのデータ送信
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    try {
-      const response = await fetch("/api/category/post", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: newCategory, // APIに渡すデータ
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error("Error submitting form:", errorData);
-      } else {
-        const result = await response.json();
-        console.log("Form submitted successfully:", result);
-      }
-    } catch (error) {
-      console.error("Error submitting form:", error);
-    }
-    setIsAddCategory((prev) => !prev);
-    onClose(); // モーダルを閉じる
-    setNewCategory(""); // 入力フィールドをクリア
-  };
-
+  const { onSubmit, newCategory, setNewCategory } = usePostCategory({
+    onClose,
+    setIsAddCategory,
+  });
   //==============================================================
 
   return (
