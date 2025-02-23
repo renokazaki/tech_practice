@@ -2,38 +2,55 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
-
 export async function GET() {
+  let prismaConnection = false;
+
   try {
-  const {userId} =await auth()
+    const { userId } = await auth();
 
     if (!userId) {
-      return NextResponse.json(
-        { error: "User ID is required" },
-        { status: 400 }
-      );
+      return new NextResponse(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
     }
 
-    // ユーザーに紐づくカテゴリを取得
-    const category = await prisma.category.findMany({
+    prismaConnection = true;
+
+    const categories = await prisma.category.findMany({
       where: {
         userId: userId,
       },
+      select: {
+        id: true,
+        name: true,
+        userId: true,
+      },
     });
 
- 
-
-    return NextResponse.json({
-      category,
+    return new NextResponse(JSON.stringify({ category: categories }), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control": "no-store",
+      },
     });
-
   } catch (error) {
-    console.error("Error fetching tasks and categories:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch tasks and categories" },
-      { status: 500 }
+    console.error("Error fetching categories:", error);
+    return new NextResponse(
+      JSON.stringify({ error: "Internal server error" }),
+      {
+        status: 500,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
     );
   } finally {
-    await prisma.$disconnect();
+    if (prismaConnection) {
+      await prisma.$disconnect();
+    }
   }
 }

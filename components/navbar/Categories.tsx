@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/select";
 import CategoryAdd from "./CategoryAdd";
 import { Category } from "@/types/category";
-import { useGetCategory } from "./hooks/useGetCotegory";
+import { useGetCategory } from "./hooks/useGetCategory";
 
 export const Categories = ({
   selectCategory,
@@ -39,7 +39,7 @@ export const Categories = ({
         {loading ? (
           <div className="text-white">Loading...</div> // ローディング中の表示
         ) : (
-          <SelectValue placeholder={selectCategory.name} />
+          <SelectValue placeholder="task" />
         )}
       </SelectTrigger>
       <SelectContent>

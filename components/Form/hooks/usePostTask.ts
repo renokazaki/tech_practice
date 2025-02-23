@@ -1,5 +1,5 @@
 import { Category } from "@/types/category";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { Dispatch, SetStateAction } from "react";
 
 import { useForm, UseFormReturn } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -60,19 +60,6 @@ export const usePostTask = ({
     }
     setIsAddTask((prev) => !prev);
   };
-
-  // フォームリセット用のuseEffect
-  useEffect(() => {
-    if (isSubmitting) {
-      return;
-    }
-    form.reset({
-      title: "",
-      description: "",
-      emergency: "low",
-      status: "pending",
-    });
-  }, [isSubmitting, form]);
 
   return {
     onSubmit,
