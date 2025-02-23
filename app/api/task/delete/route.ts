@@ -3,7 +3,6 @@ import { NextResponse } from "next/server";
 
 export async function DELETE(request: Request) {
   try {
-    // URLからtaskIdを取得
     const { searchParams } = new URL(request.url);
     const taskId = searchParams.get("selectedTaskId");
 
@@ -14,16 +13,12 @@ export async function DELETE(request: Request) {
       );
     }
 
-    // ユーザーが所有するタスクか確認
     const existingTask = await prisma.task.findUnique({
       where: { id: taskId },
     });
 
     if (!existingTask) {
-      return NextResponse.json(
-        { error: "Task not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Task not found" }, { status: 404 });
     }
 
     if (existingTask.id !== taskId) {
@@ -33,7 +28,6 @@ export async function DELETE(request: Request) {
       );
     }
 
-    // タスクを削除
     await prisma.task.delete({
       where: { id: taskId },
     });

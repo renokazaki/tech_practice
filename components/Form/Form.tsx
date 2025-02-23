@@ -53,7 +53,6 @@ const Form = ({
       <FormComp {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <div className="flex items-center gap-3">
-            {/* Title */}
             <FormField
               control={form.control}
               name="title"
@@ -67,7 +66,6 @@ const Form = ({
               )}
             />
 
-            {/* Emergency */}
             <FormField
               control={form.control}
               name="emergency"
@@ -97,7 +95,6 @@ const Form = ({
                 </FormItem>
               )}
             />
-            {/* Status */}
             <FormField
               control={form.control}
               name="status"
@@ -128,7 +125,6 @@ const Form = ({
               )}
             />
           </div>
-          {/* Description */}
           <FormField
             control={form.control}
             name="description"

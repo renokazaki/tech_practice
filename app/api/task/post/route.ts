@@ -2,10 +2,9 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
-
 export async function POST(request: Request) {
   try {
-  const {userId} =await auth()
+    const { userId } = await auth();
 
     if (!userId) {
       return NextResponse.json(
@@ -15,14 +14,12 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const title = body.title
-    const description = body.description
-    const emergency = body.emergency
-    const status = body.status
-   // URLからcategoryIdを取得
- const { searchParams } = new URL(request.url);
- const categoryId = searchParams.get("categoryId");
-
+    const title = body.title;
+    const description = body.description;
+    const emergency = body.emergency;
+    const status = body.status;
+    const { searchParams } = new URL(request.url);
+    const categoryId = searchParams.get("categoryId");
 
     if (!title || !description || !emergency || !status || !categoryId) {
       return NextResponse.json(
@@ -31,9 +28,6 @@ export async function POST(request: Request) {
       );
     }
 
-  
-
-    // Prismaを使用してデータを作成
     const activities = await prisma.task.create({
       data: {
         title,
@@ -41,27 +35,28 @@ export async function POST(request: Request) {
         emergency,
         status,
         userId,
-        categoryId
+        categoryId,
       },
     });
 
     return new NextResponse(
-      JSON.stringify({ success: true, data: activities }), 
-      { 
+      JSON.stringify({ success: true, data: activities }),
+      {
         status: 200,
-        headers: { 'Content-Type': 'application/json' }
+        headers: { "Content-Type": "application/json" },
       }
     );
-
   } catch (err) {
-    // err が null または undefined の場合に対応
-    const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-    console.error('Error posting activities:', errorMessage);
+    const errorMessage = err instanceof Error ? err.message : "Unknown error";
+    console.error("Error posting activities:", errorMessage);
     return new NextResponse(
-      JSON.stringify({ error: 'Failed to post activities', details: errorMessage }), 
-      { 
+      JSON.stringify({
+        error: "Failed to post activities",
+        details: errorMessage,
+      }),
+      {
         status: 500,
-        headers: { 'Content-Type': 'application/json' }
+        headers: { "Content-Type": "application/json" },
       }
     );
   }

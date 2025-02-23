@@ -7,11 +7,9 @@ type ListProps = {
   tasks: Task[];
 };
 
-// 必要なモジュールを登録する
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export const ChartComponent: React.FC<ListProps> = ({ tasks }) => {
-  // status のカウントを行う
   const statusCounts = tasks.reduce(
     (acc, task) => {
       if (task.status === "pending") acc.pending++;
@@ -22,17 +20,16 @@ export const ChartComponent: React.FC<ListProps> = ({ tasks }) => {
     { pending: 0, inProgress: 0, done: 0 }
   );
 
-  // Pie チャートのデータを定義
   const chartData = {
-    labels: ["Pending", "In Progress", "Done"], // ラベル
+    labels: ["Pending", "In Progress", "Done"],
     datasets: [
       {
         data: [
           statusCounts.pending,
           statusCounts.inProgress,
           statusCounts.done,
-        ], // 各ステータスの数
-        backgroundColor: ["#c7d2fe", "#6366f1", "#312e81"], // セクションの色
+        ],
+        backgroundColor: ["#c7d2fe", "#6366f1", "#312e81"],
 
         weight: 100,
       },
@@ -41,7 +38,6 @@ export const ChartComponent: React.FC<ListProps> = ({ tasks }) => {
 
   return (
     <div className="h-full w-full flex justify-center items-center">
-      {/* グラフのサイズを調整 */}
       <Pie data={chartData} />
     </div>
   );

@@ -18,9 +18,9 @@ export const useFirstGetCategory = ({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   const [retryCount, setRetryCount] = useState(0);
-  const MAX_RETRIES = 5; // リトライ回数を増やす
-  const RETRY_DELAY = 2000; // 遅延を2秒に延長
-  const INITIAL_DELAY = 3000; // 初回の遅延を3秒に設定
+  const MAX_RETRIES = 5;
+  const RETRY_DELAY = 2000;
+  const INITIAL_DELAY = 3000;
 
   useEffect(() => {
     let isMounted = true;
@@ -44,7 +44,7 @@ export const useFirstGetCategory = ({
                 if (isMounted) {
                   setRetryCount((prev) => prev + 1);
                 }
-              }, delay * (retryCount + 1)); // リトライごとに遅延を増加
+              }, delay * (retryCount + 1));
               return;
             }
             throw new Error("No categories found");
@@ -73,7 +73,6 @@ export const useFirstGetCategory = ({
       }
     };
 
-    // 初回実行を遅延
     const initialTimeout = setTimeout(fetchCategory, INITIAL_DELAY);
 
     return () => {

@@ -9,14 +9,13 @@ export async function PUT(request: Request) {
     if (!userId) {
       return NextResponse.json(
         { error: "User ID is required" },
-        { status: 401 } // 認証エラー
+        { status: 401 }
       );
     }
 
     const body = await request.json();
     const { title, description, emergency, status } = body;
 
-    // URLからtaskIdを取得
     const { searchParams } = new URL(request.url);
     const taskId = searchParams.get("selectedTaskId");
 
@@ -27,19 +26,14 @@ export async function PUT(request: Request) {
       );
     }
 
-    // 更新対象のタスクが存在するかを確認
     const existingTask = await prisma.task.findUnique({
       where: { id: taskId },
     });
 
     if (!existingTask) {
-      return NextResponse.json(
-        { error: "Task not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Task not found" }, { status: 404 });
     }
 
-    // ユーザーが所有するタスクか確認
     if (existingTask.userId !== userId) {
       return NextResponse.json(
         { error: "You are not authorized to update this task" },
@@ -47,7 +41,6 @@ export async function PUT(request: Request) {
       );
     }
 
-    // タスクを更新
     const updatedTask = await prisma.task.update({
       where: { id: taskId },
       data: {

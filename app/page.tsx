@@ -24,7 +24,6 @@ export default function Home() {
         setSelectCategory={setSelectCategory}
       />
 
-      {/* Large screens */}
       <div className="hidden lg:flex flex-row flex-1 min-h-0">
         <div className="w-1/3 flex flex-col min-h-0">
           <div className="flex-none h-1/2 p-4 border-b overflow-hidden">
@@ -54,7 +53,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Small/Medium screens */}
       <div className="lg:hidden flex flex-col flex-1 min-h-0">
         <div className="flex-none w-full p-4">
           <div className="w-full max-w-3xl mx-auto">

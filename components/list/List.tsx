@@ -27,8 +27,6 @@ export const List = ({
   tasks: Task[];
   setTasks: Dispatch<SetStateAction<Task[]>>;
 }) => {
-  //==================================================================================
-
   const {
     selectedTask,
     setSelectedTask,
@@ -42,13 +40,10 @@ export const List = ({
     setTasks,
   });
 
-  // ダブルクリックでタスクを選択し、ダイアログを開く
   const handleTaskClick = (task: Task) => {
-    setSelectedTask(task); // 選択されたタスクを設定
-    setIsDialogOpen(true); // ダイアログを開く
+    setSelectedTask(task);
+    setIsDialogOpen(true);
   };
-
-  //=================================================================-
 
   return (
     <div className="overflow-y-auto h-full w-full">
@@ -70,7 +65,7 @@ export const List = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {loading ? ( // ローディング中の表示
+          {loading ? (
             <TableRow>
               <TableCell colSpan={4}>Loading...</TableCell>
             </TableRow>

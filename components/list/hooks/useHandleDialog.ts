@@ -1,7 +1,6 @@
 import { toast } from "sonner";
 import { Task } from "@/types/tasks";
 
-// フックの引数の型定義
 type UseHandleDialogProps = {
   selectedTask: Task | null;
   setSelectedTask: React.Dispatch<React.SetStateAction<Task | null>>;
@@ -21,14 +20,12 @@ export const useHandleDialog = ({
   setIsDialogOpen,
   setTasks,
 }: UseHandleDialogProps): UseHandleDialogReturn => {
-  //モーダルを開く処理=======================================================================
   const handleChange = (field: keyof Task, value: string) => {
     if (selectedTask) {
       setSelectedTask({ ...selectedTask, [field]: value });
     }
   };
 
-  //更新用処理=======================================================================
   const handleSave = async () => {
     if (selectedTask) {
       try {
@@ -47,10 +44,8 @@ export const useHandleDialog = ({
           throw new Error("Failed to update task");
         }
 
-        // 成功レスポンスから更新済みタスクを取得
         const { data: updatedTask } = await response.json();
 
-        // ローカルタスクリストを更新
         setTasks((prevTasks) =>
           prevTasks.map((task) =>
             task.id === updatedTask.id ? updatedTask : task
@@ -65,9 +60,6 @@ export const useHandleDialog = ({
       }
     }
   };
-  //==========================================================================
-
-  //削除用処理=======================================================================
 
   const handleDelete = async () => {
     if (selectedTask) {

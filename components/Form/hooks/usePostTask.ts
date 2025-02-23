@@ -31,11 +31,8 @@ export const usePostTask = ({
 
   const { isSubmitting } = form.formState;
 
-  // サーバーへのデータ送信===========================================-
   const onSubmit = async (data: FormSchemaType) => {
     try {
-      //以降2回目のpost処理===============================================================================
-      // selectCategoryのIDをクエリパラメータとして追加
       const url = `/api/task/post?categoryId=${selectCategory.id}`;
 
       const response = await fetch(url, {
@@ -52,7 +49,7 @@ export const usePostTask = ({
       } else {
         const result = await response.json();
         console.log("Form submitted successfully:", result);
-        form.reset(); // フォームをリセット
+        form.reset();
       }
     } catch (error) {
       console.error("Error submitting form:", error);
