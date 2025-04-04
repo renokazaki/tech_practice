@@ -18,7 +18,7 @@ export default function Home() {
   const [tasks, setTasks] = useState<Task[]>([]);
 
   return (
-    <div className="h-screen w-screen flex flex-col overflow-hidden">
+    <div className="h-full w-screen flex flex-col overflow-hidden">
       <Header
         selectCategory={selectCategory}
         setSelectCategory={setSelectCategory}
@@ -26,7 +26,7 @@ export default function Home() {
 
       <div className="hidden lg:flex flex-row flex-1 min-h-0">
         <div className="w-1/3 flex flex-col min-h-0">
-          <div className="flex-none h-1/2 p-4 border-b overflow-hidden">
+          <div className="flex-none h-1/3 p-4 border-b">
             <div className="h-full flex flex-col justify-center items-center">
               <Form
                 setIsAddTask={setIsAddTask}
@@ -36,7 +36,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="flex-none h-1/2 p-4 overflow-hidden">
+          <div className="flex-none h-2/3 p-4">
             <div className="h-full flex justify-center items-center">
               <Chart tasks={tasks} />
             </div>

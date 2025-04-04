@@ -23,7 +23,6 @@ import { Textarea } from "../ui/textarea";
 import EmergencyIcon from "../EmergencyIcon";
 import { Button } from "../ui/button";
 import { Category } from "@/types/category";
-import { CardTitle } from "@/components/ui/card";
 import { usePostTask } from "./hooks/usePostTask";
 import { useFirstGetCategory } from "../navbar/hooks/useFirstGetCategory";
 
@@ -47,9 +46,6 @@ const Form = ({
 
   return (
     <>
-      <div className="pb-16 hidden lg:block">
-        <CardTitle>Task Management</CardTitle>
-      </div>
       <FormComp {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <div className="flex items-center gap-3">

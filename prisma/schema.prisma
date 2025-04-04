@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -15,14 +9,19 @@ datasource db {
 }
 
 model User {
-  id        String     @id @default(cuid())
-  userId    String     @unique // ClerkのuserIdを一意に設定
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  name      String
-  img       String
-  tasks     Task[] // ユーザーが持つタスク
-  category  Category[] // ユーザーが持つカテゴリの
+  id                     String          @id @default(cuid())
+  userId                 String          @unique // ClerkのuserIdを一意に設定
+  createdAt              DateTime        @default(now())
+  updatedAt              DateTime        @updatedAt
+  name                   String
+  img                    String
+  tasks                  Task[] // ユーザーが持つタスク
+  category               Category[] // ユーザーが持つカテゴリ
+  // 友達関係の追加
+  sentFriendRequests     FriendRequest[] @relation("SentRequests")
+  receivedFriendRequests FriendRequest[] @relation("ReceivedRequests")
+  friends                Friend[]        @relation("UserFriends")
+  friendsOf              Friend[]        @relation("FriendsOfUser")
 }
 
 model Task {
@@ -47,4 +46,31 @@ model Category {
   tasks  Task[]
 
   @@unique([name, userId]) // nameとuserIdの組み合わせでユニーク制約
+}
+
+// 友達申請モデル
+model FriendRequest {
+  id         String   @id @default(cuid())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  status     String   @default("pending") // pending, accepted, rejected
+  senderId   String
+  sender     User     @relation("SentRequests", fields: [senderId], references: [id])
+  receiverId String
+  receiver   User     @relation("ReceivedRequests", fields: [receiverId], references: [id])
+
+  @@unique([senderId, receiverId])
+}
+
+// 友達関係モデル
+model Friend {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String
+  user      User     @relation("UserFriends", fields: [userId], references: [id])
+  friendId  String
+  friend    User     @relation("FriendsOfUser", fields: [friendId], references: [id])
+
+  @@unique([userId, friendId])
 }

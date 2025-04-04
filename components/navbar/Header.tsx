@@ -1,11 +1,4 @@
 import React, { Dispatch, SetStateAction } from "react";
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  UserButton,
-  useUser,
-} from "@clerk/nextjs";
 import { Categories } from "./Categories";
 import { Category } from "@/types/category";
 
@@ -16,20 +9,8 @@ const Header = ({
   selectCategory: Category;
   setSelectCategory: Dispatch<SetStateAction<Category>>;
 }) => {
-  const { user } = useUser();
-
   return (
-    <nav className="flex justify-between items-center px-2 py-2">
-      <div className="flex items-center justify-center gap-4">
-        <SignedIn>
-          <UserButton />
-        </SignedIn>
-        <SignedOut>
-          <SignInButton>ログインしてください</SignInButton>
-        </SignedOut>
-        {user && (user.username || user.fullName || "User")}
-      </div>
-
+    <nav className="flex justify-end items-center px-2 pt-2">
       <div className="flex items-end">
         <Categories
           selectCategory={selectCategory}
